@@ -1,0 +1,94 @@
+RewriteEngine on
+ErrorDocument 403 /
+ErrorDocument 404 / 
+
+#Individual media
+RewriteCond %{REQUEST_URI} !.php
+RewriteRule ^play/([^/]+)/?$ index.php?id=8&vrw=$1 [L]
+
+#This is for all the pages
+RewriteCond %{REQUEST_URI} !.php
+
+RewriteRule ^members/_([^/]+)/__([^/]+)/?$ index.php?id=88&filter=$1&nsearch=$2 [L]
+RewriteRule ^members/_([^/]+)/__([^/]+)/([0-9]+)/?$ index.php?id=88&filter=$1&nsearch=$2&page=$3 [L]
+RewriteRule ^members/_([^/]+)/___([^/]+)/?$ index.php?id=88&filter=$1&lsearch=$2 [L]
+RewriteRule ^members/_([^/]+)/___([^/]+)/([0-9]+)/?$ index.php?id=88&filter=$1&lsearch=$2&page=$3 [L]
+RewriteRule ^members/_([^/]+)/__([^/]+)/___([^/]+)/?$ index.php?id=88&filter=$1&nsearch=$2&lsearch=$3 [L]
+RewriteRule ^members/_([^/]+)/__([^/]+)/___([^/]+)/([0-9]+)/?$ index.php?id=88&filter=$1&nsearch=$2&lsearch=$3&page=$4 [L]
+RewriteRule ^members/_([^/]+)/?$ index.php?id=88&filter=$1 [L]
+RewriteRule ^members/_([^/]+)/([0-9]+)/?$ index.php?id=88&filter=$1&page=$2 [L]
+RewriteRule ^members/?$ index.php?id=88 [L]
+RewriteRule ^members/([0-9]+)/?$ index.php?id=19&page=$1 [L]
+RewriteRule ^search/?$ index.php?id=22 [L]
+RewriteRule ^search/([0-9]+)/?$ index.php?id=22&page=$1 [L]
+RewriteRule ^search/([^/]+)/?$ index.php?id=22&keywords=$1 [L]
+RewriteRule ^search/([^/]+)/([0-9]+)/?$ index.php?id=22&keywords=$1&page=$2 [L]
+
+RewriteRule ^account/?$ index.php?id=56 [L]
+RewriteRule ^account/([a-z]+)/?$ index.php?id=56&page=$1 [L]
+RewriteRule ^account/([a-z]+)/([0-9]+)/?$ index.php?id=56&page=$1&subpage=$2  [L]
+
+RewriteRule ^videos/?$ index.php?id=7 [L]
+RewriteRule ^videos/([0-9]+)/?$ index.php?id=7&page=$1 [L]
+
+RewriteRule ^top-rated/?$ index.php?id=2 [L]
+RewriteRule ^top-rated/([0-9]+)/?$ index.php?id=2&page=$1 [L]
+
+RewriteRule ^most-viewed/?$ index.php?id=3 [L]
+RewriteRule ^most-viewed/([0-9]+)/?$ index.php?id=3&page=$1 [L]
+RewriteRule ^most-viewed/-([^/]+)/?$ index.php?id=3&filter=$1 [L]
+RewriteRule ^most-viewed/-([^/]+)/([0-9]+)/?$ index.php?id=3&filter=$1&page=$2 [L]
+
+RewriteRule ^categories/?$ index.php?id=14 [L]
+
+RewriteRule ^category/([^/]+)/_([^/]+)/__([^/]+)/___([^/]+)/([0-9]+)/?$ index.php?id=21&crw=$1&scrw=$2&sscrw=$3&filter=$4&page=$5 [L]
+RewriteRule ^category/([^/]+)/_([^/]+)/__([^/]+)/([0-9]+)/?$ index.php?id=21&crw=$1&scrw=$2&sscrw=$3&page=$4 [L]
+RewriteRule ^category/([^/]+)/_([^/]+)/__([^/]+)/___([^/]+)/?$ index.php?id=21&crw=$1&scrw=$2&sscrw=$3&filter=$4 [L]
+RewriteRule ^category/([^/]+)/_([^/]+)/__([^/]+)/?$ index.php?id=21&crw=$1&scrw=$2&sscrw=$3 [L]
+
+RewriteRule ^category/([^/]+)/_([^/]+)/___([^/]+)/([0-9]+)/?$ index.php?id=21&crw=$1&scrw=$2&filter=$3&page=$4 [L]
+RewriteRule ^category/([^/]+)/_([^/]+)/([0-9]+)/?$ index.php?id=21&crw=$1&scrw=$2&page=$3 [L]
+RewriteRule ^category/([^/]+)/_([^/]+)/___([^/]+)/?$ index.php?id=21&crw=$1&scrw=$2&filter=$3 [L]
+RewriteRule ^category/([^/]+)/_([^/]+)/?$ index.php?id=21&crw=$1&scrw=$2 [L]
+
+RewriteRule ^category/([^/]+)/___([^/]+)/([0-9]+)/?$ index.php?id=21&crw=$1&filter=$2&page=$3 [L]
+RewriteRule ^category/([^/]+)/([0-9]+)/?$ index.php?id=21&crw=$1&page=$2 [L]
+RewriteRule ^category/([^/]+)/___([^/]+)/?$ index.php?id=21&crw=$1&filter=$2 [L]
+RewriteRule ^category/([^/]+)/?$ index.php?id=21&crw=$1 [L]
+
+RewriteRule ^rss/?$ index.php?id=29 [L]
+RewriteRule ^rss/(.*) rss.php?feed=$1 [L]
+
+RewriteRule ^forgot/?$ index.php?id=4 [L]
+RewriteRule ^upload/?$ index.php?id=5 [L]
+RewriteRule ^embed/?$ index.php?id=9 [L]
+RewriteRule ^signup/?$ index.php?id=6 [L]
+RewriteRule ^login/?$ index.php?id=12 [L]
+RewriteRule ^logout/?$ index.php?logout=1 [L]
+RewriteRule ^terms/?$ index.php?id=16 [L]
+RewriteRule ^dmca/?$ index.php?id=33 [L]
+RewriteRule ^2257/?$ index.php?id=34 [L]
+
+RewriteRule ^contact/?$ index.php?id=17 [L]
+RewriteRule ^history/?$ index.php?id=50 [L]
+RewriteRule ^history/([0-9]+)/?$ index.php?id=50&page=$1 [L]
+RewriteRule ^favorites/?$ index.php?id=51&page=1 [L]
+RewriteRule ^favorites/([0-9]+)/?$ index.php?id=51&page=$1 [L] 
+
+#New Profile
+RewriteRule ^profile/([A-z0-9_-]+)/([a-z]+)/_([^/]+)/([0-9]+)/?$ index.php?id=18&user=$1&act=$2&opt=$3&page=$4 [L]
+RewriteRule ^profile/([A-z0-9_-]+)/([a-z]+)/_([^/]+)/?$ index.php?id=18&user=$1&act=$2&opt=$3 [L]
+RewriteRule ^profile/([A-z0-9_-]+)/([a-z]+)/([0-9]+)/?$ index.php?id=18&user=$1&act=$2&page=$3 [L]
+RewriteRule ^profile/([A-z0-9_-]+)/([a-z]+)/?$ index.php?id=18&user=$1&act=$2 [L]
+RewriteRule ^profile/([A-z0-9_-]+)/([0-9]+)/?$ index.php?id=18&user=$1&page=$2 [L]
+RewriteRule ^profile/([A-z0-9_-]+)/?$ index.php?id=18&user=$1 [L]
+
+
+<Files *.tpl>
+	deny from all
+</Files>
+Options All -Indexes
+<files *.inc>
+order allow,deny
+deny from all
+</files>

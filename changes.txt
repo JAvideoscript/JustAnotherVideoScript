@@ -1,0 +1,18 @@
+v1.4.1 - changes since v1.4.0
+
+renamed lighttpd.rewirte to lighttpd.rewrite
+Changed lighttpd.rewrite:
+"^/account/([a-z_-]+)" => "/index.php?id=56&page=$1",
+"^/account/([a-zA-Z0-9_-]+)/([0-9_-]+)" => "/index.php?id=56&page=$1&subpage=$2",
+to:
+"^/account/([a-zA-Z0-9_-]+)/([0-9_-]+)" => "/index.php?id=56&page=$1&subpage=$2",
+"^/account/([a-z_-]+)" => "/index.php?id=56&page=$1",
+
+/includes/functions.inc: changed .jpg to .png for stars
+
+/includes/category.inc Changed biggerbutton to biggerbutton2
+/includes/mediasearch.inc Changed biggerbutton to biggerbutton2
+/includes/catlist.inc Fixed bug: Number of video in category was not set, added query in the loop.
+/ajaxfunc.php, /includes/account.inc, /includes/home.inc, /includes/profile.inc, /includes/tablefunctions.inc changed default images from .jpg to .png
+/includes/functions.inc added function checkmail
+/includes/changeemail.inc added a mail requirement check

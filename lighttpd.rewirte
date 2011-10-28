@@ -1,0 +1,90 @@
+$HTTP["host"] =~ "(^|\.)YOURDOMAINNAME\.COM$" {
+server.document-root = "/YOUR/ROOT/TO/SITE"
+
+server.error-handler-403 = "/"
+server.error-handler-404 = "/"
+
+url.rewrite-once = (
+
+
+"^/play/([^.?]*)" => "/index.php?id=8&vrw=$1",
+
+"^/members/_([^.?]*)/__([^.?]*)" => "/index.php?id=88&filter=$1&nsearch=$2",
+"^/members/_([^.?]*)/__([^.?]*)/([0-9_-]+)" => "/index.php?id=88&filter=$1&nsearch=$2&page=$3",
+"^/members/_([^.?]*)/___([^.?]*)" => "/index.php?id=88&filter=$1&lsearch=$2",
+"^/members/_([^.?]*)/___([^.?]*)/([0-9_-]+)" => "/index.php?id=88&filter=$1&lsearch=$2&page=$3",
+"^/members/_([^.?]*)/__([^.?]*)/___([^.?]*)" => "/index.php?id=88&filter=$1&nsearch=$2&lsearch=$3",
+"^/members/_([^.?]*)/__([^.?]*)/___([^.?]*)/([0-9_-]+)" => "/index.php?id=88&filter=$1&nsearch=$2&lsearch=$3&page=$4",
+"^/members/_([^.?]*)" => "/index.php?id=88&filter=$1",
+"^/members/_([^.?]*)/([0-9_-]+)" => "/index.php?id=88&filter=$1&page=$2",
+"^/members$" => "/index.php?id=88",
+"^/members/([0-9_-]+)" => "/index.php?id=19&page=$1",
+
+"^/search$" => "/index.php?id=22",
+"^/search/([0-9_-]+)" => "/index.php?id=22&page=$1",
+"^/search/([^.?]*)" => "/index.php?id=22&keywords=$1",
+"^/search/([^.?]*)/([0-9_-]+)" => "/index.php?id=22&keywords=$1&page=$2",
+
+"^/account$" => "/index.php?id=56",
+
+"^/account/([a-zA-Z0-9_-]+)/([0-9_-]+)" => "/index.php?id=56&page=$1&subpage=$2",
+"^/account/([a-z_-]+)" => "/index.php?id=56&page=$1",
+
+"^/videos$" => "/index.php?id=7",
+"^/videos/([0-9_-]+)" => "/index.php?id=7&page=$1",
+
+"^/top-rated$" => "/index.php?id=2",
+"^/top-rated/([0-9_-]+)" => "/index.php?id=2&page=$1",
+
+
+"^/most-viewed$" => "/index.php?id=3",
+"^/most-viewed/([0-9_-]+)" => "/index.php?id=3&page=$1",
+
+"^/most-viewed/([^.?]*)" => "/index.php?id=3&filter=$1",
+"^/most-viewed/([^.?]*)/([0-9_-]+)" => "/index.php?id=3&filter=$1&page=$2",
+
+"^/rss$" => "/index.php?id=29",
+"^/rss/([^.?]*)" => "/index.php?id=29&feed=$1",
+"^/categories$" => "/index.php?id=14",
+
+
+"^/forgot$" => "/index.php?id=4",
+"^/upload$" => "/index.php?id=5",
+"^/embed$" => "/index.php?id=9",
+"^/signup$" => "/index.php?id=6",
+"^/login$" => "/index.php?id=12",
+
+"^/logout$" => "/index.php?logout=1",
+"^/terms$" => "/index.php?id=16",
+"^/dmca$" => "/index.php?id=33",
+"^/2257$" => "/index.php?id=34",
+"^/contact$" => "/index.php?id=17",
+"^/history$" => "/index.php?id=50",
+"^/history/([0-9_-]+)" => "/index.php?id=50&page=$1",
+
+"^/favorites$" => "/index.php?id=51&page=1",
+"^/favorites/([0-9_-]+)" => "/index.php?id=51&page=$1",
+
+"^/profile/([a-zA-Z0-9_-]+)/([a-z_-]+)/([^.?]*)/([0-9_-]+)" => "/index.php?id=18&user=$1&act=$2&opt=$3&page=$4",
+"^/profile/([a-zA-Z0-9_-]+)/([a-z_-]+)/([^.?]*)" => "/index.php?id=18&user=$1&act=$2&opt=$3",
+"^/profile/([a-zA-Z0-9_-]+)/([a-z_-]+)/([0-9_-]+)" => "/index.php?id=18&user=$1&act=$2&page=$3",
+"^/profile/([a-zA-Z0-9_-]+)/([a-z_-]+)" => "/index.php?id=18&user=$1&act=$2",
+"^/profile/([a-zA-Z0-9_-]+)/([0-9_-]+)" => "/index.php?id=18&user=$1&page=$2",
+"^/profile/([a-zA-Z0-9_-]+)" => "/index.php?id=18&user=$1",
+
+"^/category/([^.?]*)/_([^.?]*)/__([^.?]*)/___([^.?]*)/([0-9_-]+)" => "/index.php?id=21&crw=$1&scrw=$2&sscrw=$3&filter=$4&page=$5",
+"^/category/([^.?]*)/_([^.?]*)/__([^.?]*)/([0-9_-]+)" => "/index.php?id=21&crw=$1&scrw=$2&sscrw=$3&page=$4",
+"^/category/([^.?]*)/_([^.?]*)/__([^.?]*)/___([^.?]*)" => "/index.php?id=21&crw=$1&scrw=$2&sscrw=$3&filter=$4",
+"^/category/([^.?]*)/_([^.?]*)/__([^.?]*)" => "/index.php?id=21&crw=$1&scrw=$2&sscrw=$3",
+
+"^/category/([^.?]*)/_([^.?]*)/___([^.?]*)/([0-9_-]+)" => "/index.php?id=21&crw=$1&scrw=$2&filter=$3&page=$4",
+"^/category/([^.?]*)/_([^.?]*)/([0-9_-]+)" => "/index.php?id=21&crw=$1&scrw=$2&page=$3",
+"^/category/([^.?]*)/_([^.?]*)/___([^.?]*)" => "/index.php?id=21&crw=$1&scrw=$2&filter=$3",
+"^/category/([^.?]*)/_([^.?]*)" => "/index.php?id=21&crw=$1&scrw=$2",
+
+"^/category/([^.?]*)/___([^.?]*)/([0-9_-]+)" => "/index.php?id=21&crw=$1&filter=$2&page=$3",
+"^/category/([^.?]*)/([0-9_-]+)" => "/index.php?id=21&crw=$1&page=$2",
+"^/category/([^.?]*)/___([^.?]*)" => "/index.php?id=21&crw=$1&filter=$2",
+"^/category/([^.?]*)" => "/index.php?id=21&crw=$1"
+)
+}

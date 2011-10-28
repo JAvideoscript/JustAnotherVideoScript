@@ -1,0 +1,9 @@
+# robots.txt file for http://www.Justanothervideoscript.com/
+# sitemap: http://Justanothervideoscript.com/sitemap/sitemap.xml
+User-agent: *
+Disallow: /most-viewed/week/
+Disallow: /most-viewed/month/
+Disallow: /most-viewed/today/
+Disallow: /search/
+
+Allow: /

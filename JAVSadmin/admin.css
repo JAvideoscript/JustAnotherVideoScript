@@ -1,0 +1,272 @@
+h3 {
+	text-align:center;
+}
+.glossymenu{
+float:left;
+margin: 5px 0;
+padding: 0;
+width: 170px; /*width of menu*/
+border: 1px solid #9A9A9A;
+border-bottom-width: 0;
+}
+.glossymenu a.menuitem{
+background: black url(images/glossyback.gif) repeat-x bottom left;
+font: bold 14px "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, sans-serif;
+color: white;
+display: block;
+position: relative; /*To help in the anchoring of the ".statusicon" icon image*/
+width: auto;
+padding: 4px 0;
+padding-left: 10px;
+text-decoration: none;
+}
+.glossymenu a.menuitem:visited, .glossymenu .menuitem:active{
+color: white;
+}
+.glossymenu a.menuitem .statusicon{ /*CSS for icon image that gets dynamically added to headers*/
+position: absolute;
+top: 5px;
+right: 5px;
+border: none;
+}
+.glossymenu a.menuitem:hover{
+background-image: url(images/glossyback2.gif);
+}
+.glossymenu div.submenu{ /*DIV that contains each sub menu*/
+background: white;
+}
+.glossymenu div.submenu ul{ /*UL of each sub menu*/
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+.glossymenu div.submenu ul li{
+border-bottom: 1px solid blue;
+}
+.glossymenu div.submenu ul li a{
+display: block;
+font: normal 13px "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, sans-serif;
+color: black;
+text-decoration: none;
+padding: 2px 0;
+padding-left: 10px;
+}
+.glossymenu div.submenu ul li a:hover{
+background: #DFDCCB;
+colorz: white;
+}
+.import{
+	float:left;
+	margin:5px 0;
+	padding-left:30px;
+	padding-top:30px;
+	width:700px;
+}
+.import a.menuitem{
+background: black url(images/glossyback.gif) repeat-x bottom left;
+font: bold 14px "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, sans-serif;
+color: white;
+display: block;
+position: relative; /*To help in the anchoring of the ".statusicon" icon image*/
+width: auto;
+padding: 4px 0;
+padding-left: 10px;
+text-decoration: none;
+}
+.import a.menuitem:visited, .glossymenu .menuitem:active{
+color: white;
+}
+.import a.menuitem .statusicon{ /*CSS for icon image that gets dynamically added to headers*/
+position: absolute;
+top: 5px;
+right: 5px;
+border: none;
+}
+.import a.menuitem:hover{
+background-image: url(images/glossyback2.gif);
+}
+.import div.submenu{ /*DIV that contains each sub menu*/
+background: white;
+}
+.import div.submenu ul{ /*UL of each sub menu*/
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+.import div.submenu ul li{
+border-bottom: 1px solid blue;
+}
+.import div.submenu ul li a{
+display: block;
+font: normal 13px "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, sans-serif;
+color: black;
+text-decoration: none;
+padding: 2px 0;
+padding-left: 10px;
+}
+.import div.submenu ul li a:hover{
+background: #DFDCCB;
+colorz: white;
+}
+
+
+
+#wrapper {
+width: 1024px;
+margin:0 auto;
+overflow:hidden;
+}
+#content {
+float:right;
+width: 850px; /*width of content*/
+border: 1px solid #9A9A9A;
+}
+
+form {
+font-size:14px;
+margin:0;
+overflow:hidden;
+padding:0;
+}
+form.smalltext {
+font-size:11px;
+}
+textarea {
+background:none repeat scroll 0 0 #FFFFFF;
+border:1px solid #E5E7D4;
+color:#1C7CC2;
+font:12px Trebuchet MS,Arial,Helvetica,sans-serif;
+margin:5px 0 0;
+padding:4px;
+width:96%;
+}
+label {
+margin:0;
+padding:0;
+}
+input {
+color:#0E0E0E;
+font:12px Trebuchet MS,Arial,Helvetica,sans-serif;
+margin:5px 0 0;
+overflow:hidden;
+padding:2px;
+}
+input.filebox {
+background-color:#F0F0F0;
+font:14px Trebuchet MS,Arial,Helvetica,sans-serif;
+height:30px;
+width:250px;
+}
+input.biggerbutton {
+height:30px;
+}
+
+input.select {
+width:60px;
+}
+input.submit {
+height:30px;
+}
+td {
+color:#14BEF0;
+}
+textarea {
+background:none repeat scroll 0 0 #FFFFFF;
+border:1px solid #E5E7D4;
+color:#000000;
+font:12px Trebuchet MS,Arial,Helvetica,sans-serif;
+margin:5px 0 0;
+padding:4px;
+width:96%;
+}
+input.field {
+background:none repeat scroll 0 0 transparent;
+border:medium none;
+color:#DD6C92;
+font:12px Trebuchet MS,Arial,Helvetica,sans-serif;
+margin:0;
+padding:0;
+}
+input.defaulter {
+background:none repeat scroll 0 0 transparent;
+border:medium none;
+color:#000000;
+font:12px Trebuchet MS,Arial,Helvetica,sans-serif;
+margin:4px;
+padding:0;
+width:190px;
+}
+fieldset {
+background:none repeat scroll 0 0 #ffffff;
+border-color:#14BEF0;
+margin:0;
+padding:0;
+}
+fieldset h4 {
+color:#14BEF0;
+}
+fieldset b {
+color:#000000;
+}
+legend {
+color:#14BEF0;
+font:bold 18px Trebuchet MS,Arial,Helvetica,sans-serif;
+margin-left:1em;
+}
+fieldset ol {
+color:#14BEF0;
+list-style:none outside none;
+padding:0 1em;
+}
+fieldset li {
+clear:left;
+color:#14BEF0;
+float:left;
+padding-bottom:1em;
+width:100%;
+}
+fieldset.submit {
+border:0 none #FFFFFF;
+float:none;
+padding:1em 0 0 10em;
+width:auto;
+}
+label {
+color:#14BEF0;
+float:left;
+margin-right:1em;
+text-align:right;
+width:200px;
+}
+label.comment {
+float:left;
+margin-right:1em;
+padding-top:8px;
+text-align:right;
+width:2em;
+}
+
+
+//youtube downloader
+#url {
+	font-size: 1em;
+	color: #222222;
+	background-color: #F8F8F8;
+	width: 334px;
+	margin: 0px 0px 4px 0px;
+	padding: 2px;
+	border-color: #333333 #CCCCCC #CCCCCC #333333;
+	border-style: solid;
+	border-width: 1px;
+}
+#download {
+	font-family: sans-serif;
+	font-size: 1em;
+	width: 80px;
+	height: 26px;
+	cursor: pointer;
+}
+#loading, #frame {
+	padding: 6px;
+	display: none;
+}
