@@ -95,7 +95,7 @@ if (($_GET['id'] == 2) && ($_GET['tags'] != '') && ($_GET['poster'] != '')) {
 	echo displayRUser($res);
 	echo '</ul></div>' ;
 }
-if (($_GET['id'] == 3) && ($_GET['vivid'] != '')) {
+if (($_GET['id'] == 3) && ($_GET['comment'] != '')) {
 	$scode2 = quote_smart($_GET['scode2']) ;
 	$vidid = quote_smart($_GET['vidid']) ;
 	$_SESSION['session_vidid']  = $vidid;
