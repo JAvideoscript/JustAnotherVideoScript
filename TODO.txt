@@ -1,0 +1,61 @@
+This list is what I want to do with the script. Not everything will be developed because this are just some ideas I have for the future.
+Remember you can always ask me to add something or customize some things for money.
+
+------------------------------------------------------------------------------------------------------------
+
+THIS I WANT TO COMPLETE BEFORE NEW VERSION 1.4.3
+- Mail options
+	- new media mail send to uploaders friends
+	- uploaded video is approved
+	- User gets friend request
+	- User gets new message
+- Make jwplayer skin match templates	
+- Forgot email in brown template on Login page
+- More server info in status
+- Embedded code on play page on/off
+
+
+THIS IS A LIST I HAVE ON MY MIND:
+- Change the way settings get pulled from DB.
+- Cache for static pages
+- Auto tag video's
+- Remove categories and replace with TAGS video's have. (note: most video's belong in multiple categories, so why not use tags where they are for.)
+- Protect video link and download link.
+
+
+
+IDEAS FOR LATER:
+- Automatic mail users every week/month with toprated/mostviewed/top 5, bleh bleh bleh
+- Upload video's and make them public or private
+	- My Media after login needs to show public and private
+	- Friends can see this video option
+	- members can delete own video's private/public
+- Language module
+- Seo on/off
+- Jquery the hell out of administrator page. 
+- Rotating thumbnails
+- Theme week
+
+
+
+
+
+
+PLUGINS IDEAS:
+- Mobile version
+- Multi-server
+- Contact form
+- Forum
+- blog/news section
+- User rights, with payment engines
+- Advertising rotator
+- Mass embedder
+- User/visitor Profile spy (collect all data about a user like to see what he likes)
+	- ip
+	- Time on site and when
+	- Which video's
+	- Which tags
+
+
+NEVER WILL DO THIS:
+- API with other websites.

@@ -1,4 +1,4 @@
-Just Another Video Script 1.4.1 Install Instructions.
+Just Another Video Script 1.4.2 Install Instructions.
 --=============================================================--
 
 FAQ: http://www.justanothervideoscript.com/faq
@@ -33,7 +33,7 @@ If you follow these manuals your site will be up and running in no-time.
 For questions look at the link on the top of this README.txt
 
 
-Just Another Video Script 1.4.1
+Just Another Video Script 1.4.2
 
 
 http://forums.justanothervideoscript.com/
