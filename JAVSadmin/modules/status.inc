@@ -158,13 +158,63 @@ if (is_writable('modules/settings.inc')) {
 } else {
 	$Fw_uploads_incl_adm = $red;
 }
-?>
 
+$df = disk_free_space($rootpath);
+$dt = disk_total_space($rootpath);
+$du = $dt - $df;
+$dp = sprintf('%.2f',($du / $dt) * 100);
+$df = formatSize($df);
+$du = formatSize($du);
+$dt = formatSize($dt);
+
+
+?>
+<style type='text/css'>
+    .serverinfo {
+            border: 2px solid #5E96E4;
+            height: 32px;
+            width: 540px;
+            margin: 30px auto;
+    }
+    .serverinfo .prgbar {
+            background: #A7C6FF;
+            width: <?php echo $dp; ?>%;
+            position: relative;
+            height: 32px;
+            z-index: 999;
+    }
+    .serverinfo .prgtext {
+            color: #286692;
+            text-align: center;
+            font-size: 13px;
+            padding: 9px 0 0;
+            width: 540px;
+            position: absolute;
+            z-index: 1000;
+    }
+    .serverinfo .prginfo {
+            margin: 3px 0;
+    }
+</style>
 <fieldset>
 	<ol>	
+	
+		<li>
+			<h2>Server Info</h2>
+		</li>	
+		<li>
+			<label>Total Disk Space</label>
+			<div class='serverinfo'>
+				<div class='prgtext'><?php echo $dp; ?>% Disk Used</div>
+				<div class='prgbar'></div>
+				<div class='prginfo'>
+					<span><?php echo "$du used of $dt total"; ?></span>
+				</div>
+			</div>
+		</li>	
 		<li>
 			<h2>Account overview</h2>
-		</li>	
+		</li>
 		<li>
 			<label>Number of approved videos:</label> 
 			<label><?=$numvideostrue?></label>
