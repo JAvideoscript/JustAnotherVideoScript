@@ -18,7 +18,7 @@ if (!Beveiliging()){
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <title>JAVS Admin</title>
-<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/ddaccordion.js"></script>
 <script type="text/javascript">
 ddaccordion.init({
