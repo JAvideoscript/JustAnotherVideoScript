@@ -39,7 +39,7 @@ $().ready(function() {
 				minlength: 5,
 				lettersonly: true,
 				remote: {
-					url: "http://javsdemo.com/includes/signupcheck.php",
+					url: "<?=$sitepath?>includes/signupcheck.php",
 					type: "post",
 				}
 			},
@@ -56,7 +56,7 @@ $().ready(function() {
 				required: true,
 				email: true,
 				remote: {
-					url: "http://javsdemo.com/includes/signupcheck.php",
+					url: "<?=$sitepath?>includes/signupcheck.php",
 					type: "post",
 				} 				
 			},

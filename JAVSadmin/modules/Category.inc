@@ -34,6 +34,7 @@ if (isset($_POST['submit'])) {
 	if ($halt == "no") {
 		echo "Category with name: $catname is now created" ;
 		$db->query("INSERT INTO `category` (name) VALUES ('".$catname."')") ;
+		unset($catname);
 	}
 
 }
@@ -94,10 +95,18 @@ if (isset($_POST['submit3'])) {
 			 	if(move_uploaded_file($_FILES['newavatar']['tmp_name'],$upload_path . $newavatar)) {
 					require_once "../includes/imagefunctions.inc" ;
 					$avatarfilename = $catname.".jpg" ;
-					createThumb($newavatar, "226", "160", $rootpath."uploads/category/", $avatarfilename);
-						if(filesize($upload_path . $filename_thumb)) {
-							unlink($upload_path . $newavatar) ;
-						}
+
+					//crazy fix
+					rename($rootpath."uploads/category/".$newavatar, $rootpath."uploads/category/temp".$ext) ;
+					//resize the picture
+					createThumb("temp.jpg", "226", "160", $rootpath."uploads/category/", $avatarfilename);
+					
+					//remove temp
+					if (file_exists($rootpath.'uploads/category/temp.jpg')) {
+						unlink($rootpath.'uploads/category/temp.jpg');
+					}
+						
+					
 				}
 			}
 		

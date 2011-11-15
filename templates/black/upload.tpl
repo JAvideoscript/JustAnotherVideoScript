@@ -14,45 +14,181 @@ if (!$loggedIn) {
 $filezise = (getsetting("mediamaxsize", $db) / 1024) / 1024 ;
 ?>
 
-<script language="JavaScript" type="text/javascript">
-	function checkform ( form ) {
-		if (form.emtitle.value == "") {
-			alert( "Please enter a title." );
-			form.title.focus();
-			return false ;
-		}
-		if (form.emdescription.value == "") {
-			alert( "Please enter a description." );
-			form.emdescription.focus();
-			return false ;
-		}
-		if (form.emtags.value == "") {
-			alert( "Please enter tags." );
-			form.emtags.focus();
-			return false ;
-		}
-		if (form.emembedcode.value == "") {
-			alert( "Please enter embed code." );
-			form.emembedcode.focus();
-			return false ;
-		} 
-		if (form.emthumbe.value == "") {
-			alert( "Please select a thumb." );
-			form.emthumbe.focus();
-			return false ;
-		} 
-		if (form.emcatergory.value == "-----") {
-			alert( "Please select a category." );
-			form.emcatergory.focus();
-			return false ;
-		}  
-	  return true ;
-	}
-</script>
-
+<script type="text/javascript" src="<?=$sitepath?>js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="<?=$sitepath?>swfupload/swfupload.js"></script>
 <script type="text/javascript" src="<?=$sitepath?>swfupload/fileprogress.js"></script>
 <script type="text/javascript" src="<?=$sitepath?>swfupload/handlers.js"></script>
+
+<script type="text/javascript">
+
+jQuery.validator.addMethod("selectNone", 
+	function(value, element) { 
+		if (element.value == "-----") { 
+	      		return false; 
+	    	} else {
+	    		return true;
+	    	}
+	  }, "Select one please"
+); 
+jQuery.validator.addMethod("lettersonly", 
+	function(value, element) {
+  		return this.optional(element) || /^[a-z0-9 _]+$/i.test(value);
+	}, "Letters only please"
+);
+jQuery.validator.addMethod("letterscomma", 
+	function(value, element) {
+  		return this.optional(element) || /^[a-z0-9 _,]+$/i.test(value);
+	}, "Letters only please"
+); 
+
+$().ready(function() {
+	// validate signup form on keyup and submit
+	$("#embedform").validate({
+		rules: {
+			emtitle: {
+				required: true,
+				minlength: 10,
+				lettersonly: true,
+				remote: {
+					url: "<?=$sitepath?>includes/titlecheck.php",
+					type: "post",
+				}				
+			},
+			emdescription: {
+				required: true,
+				minlength: 10
+			},
+			emtags: {
+				required: true,
+				letterscomma: true,
+				minlength: 10
+			},
+			emcatergory: {
+				selectNone: true 
+			},
+			emembedcode: {
+				required: true,
+				minlength: 10,			
+			},
+			emthumbe: {
+				required: true
+			}
+
+		},
+		messages: {
+			emtitle: {
+				required: "Please enter a title",
+				minlength: "Your title must consist of at least 10 characters",
+				remote: "Title already in use"
+			},
+			emdescription: {
+				required: "Please enter a description",
+				minlength: "Your description must consist of at least 10 characters"
+			},
+			emtags: {
+				required: "Please enter some tags",
+				minlength: "Your tags must consist of at least 10 characters"
+			},
+			emcatergory: "Please select a category from the list",
+			emembedcode: {
+				required: "Please enter a embed code",
+				minlength: "Your tags must consist of at least 50 characters"
+			},
+			emthumbe: "Please select a gender from the list"
+		}
+	});
+	$("#form1").validate({
+		rules: {
+			title: {
+				required: true,
+				minlength: 10,
+				lettersonly: true,
+				remote: {
+					url: "<?=$sitepath?>includes/titlecheck.php",
+					type: "post",
+				}				
+			},
+			description: {
+				required: true,
+				minlength: 10
+			},
+			tags: {
+				required: true,
+				letterscomma: true,
+				minlength: 10
+			},
+			catergory: {
+				selectNone: true 
+			},
+			txtFileName: {
+				required: true,
+				accept: "wmv|mov|flv|mpg|avi|mpeg|mp4|3gp|rm|asf"
+			},
+			terms: {
+				required: true
+			}
+
+		},
+		messages: {
+			title: {
+				required: "Please enter a title",
+				minlength: "Your title must consist of at least 10 characters",
+				remote: "Title already in use"
+			},
+			description: {
+				required: "Please enter a description",
+				minlength: "Your description must consist of at least 10 characters"
+			},
+			tags: {
+				required: "Please enter some tags",
+				minlength: "Your tags must consist of at least 10 characters"
+			},
+			catergory: "Please select a category from the list",
+			txtFileName: {
+				required: "Please select a file",
+				accept: "File Extension is not allowed",
+			},
+			terms: "Please agree to the terms"
+		},
+ 
+ 		submitHandler: function(form) {
+			//check again
+			var txttitle = document.getElementById("title");
+			var txtdescription = document.getElementById("description");
+			var txttags = document.getElementById("tags");
+			var txtFileName = document.getElementById("txtFileName");
+			var txtcategory = document.getElementById("category");
+			var txtterms = document.getElementById("terms");
+			var isValid = true;
+			if (txttitle.value === "") {
+				isValid = false;
+			}
+			if (txtdescription.value === "") {
+				isValid = false;
+			}
+			if (txttags.value === "") {
+				isValid = false;
+			}
+			if (txtFileName.value === "") {
+				isValid = false;
+			}
+			if (txtcategory.value === "-----") {
+				isValid = false;
+			}
+			if (document.getElementById("terms").checked == false) {
+				isValid = false;
+			}			
+			if (isValid == true) {
+				swfUploadLoaded();
+			}
+	
+ 		}
+	
+	});
+
+});
+
+</script>
 <script type="text/javascript">
 		var swfu;
 		window.onload = function () {
@@ -69,7 +205,7 @@ $filezise = (getsetting("mediamaxsize", $db) / 1024) / 1024 ;
 				file_queue_limit : "1",
 
 				// Event handler settings
-				swfupload_loaded_handler : swfUploadLoaded,
+
 
 				file_dialog_start_handler: fileDialogStart,
 				file_queued_handler : fileQueued,
@@ -165,7 +301,7 @@ $filezise = (getsetting("mediamaxsize", $db) / 1024) / 1024 ;
             		
 			<label>
 				<span>Terms</span>
-				<input id="terms" type="checkbox" />
+				<input id="terms" name="terms" type="checkbox" />
 			</label>
 
 
@@ -199,21 +335,21 @@ $filezise = (getsetting("mediamaxsize", $db) / 1024) / 1024 ;
 	<?
 	if (getSetting("showembed", $db) == '1') {
 	?>
-		<form action="" method="post" enctype="multipart/form-data" onsubmit="return checkform(this);">
+		<form action="" method="post" enctype="multipart/form-data" id="embedform">
 			<div class="box">
 				<?=$msgb?>
 				<label>
 					<span>Title</span>
-				        <input type="text" class="input_text" name="emtitle" id="emtitle" <?php if(isset($_POST['title'])) echo "value='" . $_POST['title'] . "'";?> />
+				        <input type="text" class="input_text" name="emtitle" id="emtitle" />
             			</label>
 			
 				<label>
 	                		<span>Description</span>
-	                		<input type="text" class="input_text" name="emdescription" id="emdescription" <?php if(isset($_POST['description'])) echo "value='" . $_POST['description'] . "'";?> />
+	                		<input type="text" class="input_text" name="emdescription" id="emdescription" />
             			</label>			
 				<label>
 	                		<span>Tags</span>
-	                		<input type="text" class="input_text" name="emtags" id="emtags" <?php if(isset($_POST['tags'])) echo "value='" . $_POST['tags'] . "'";?> />
+	                		<input type="text" class="input_text" name="emtags" id="emtags"/>
             			</label>						
 				<label>
 	                		<span>Catergory</span>				
@@ -231,12 +367,12 @@ $filezise = (getsetting("mediamaxsize", $db) / 1024) / 1024 ;
 				</label>
 				<label>
 	                		<span>Thumbnail</span>
-	                		<input type="file" class="input_text" name="emthumbe" id="emthumbe" <?php if(isset($_POST['thumbe'])) echo "value='" . $_POST['thumbe'] . "'";?> />
+	                		<input type="file" class="input_text" name="emthumbe" id="emthumbe" />
             			</label>
 			
 				<label>
 	                		<span>Embed code</span>		
-					<textarea name="emembedcode" class="message" id="emembedcode" cols="0" rows="0"><?php if(isset($_POST['embedcode'])) echo $_POST['embedcode'];?></textarea>
+					<textarea name="emembedcode" class="message" id="emembedcode" cols="0" rows="0"></textarea>
             			</label>		
 		
 		

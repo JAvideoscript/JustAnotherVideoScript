@@ -50,7 +50,7 @@ $().ready(function() {
 				minlength: 10,
 				lettersonly: true,
 				remote: {
-					url: "http://javsdemo.com/includes/titlecheck.php",
+					url: "<?=$sitepath?>includes/titlecheck.php",
 					type: "post",
 				}				
 			},
@@ -104,7 +104,7 @@ $().ready(function() {
 				minlength: 10,
 				lettersonly: true,
 				remote: {
-					url: "http://javsdemo.com/includes/titlecheck.php",
+					url: "<?=$sitepath?>includes/titlecheck.php",
 					type: "post",
 				}				
 			},

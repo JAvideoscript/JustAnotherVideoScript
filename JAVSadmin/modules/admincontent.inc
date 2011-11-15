@@ -36,8 +36,7 @@ switch ($_GET['do']) {
 	break; case"frontvideo":include_once('modules/frontvideo.inc');
 	break; case"logout":session_start(); session_destroy(); header("Location: index.php");
 	break; case"changepass":include_once('modules/changepass.inc');
-	break; case"videodownloader":include_once('modules/videodownloader.inc');
-	
+
 }
 
 
