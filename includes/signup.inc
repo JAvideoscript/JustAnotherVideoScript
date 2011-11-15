@@ -73,14 +73,14 @@ if (isset($_POST['username'])) {
 			if ($activation == "1") {
 				$actkey = md5(uniqid(rand())) ;
 				$db->query("INSERT INTO member (username,password,email,activationkey,created,location,age,gender) VALUES ('".$username."','".$password."','".$email."','$actkey','".time()."','".$location."','".$age."',".$gender.")") ;
-				$message = getEmail("email_activate") ;
+				$message = getEmailformat("email_activate") ;
 				$message = str_replace("[SITEURL]", "http://".$_SERVER['SERVER_NAME'], $message) ;
 				$message = str_replace("[ACTLINK]", $sitepath."?id=10&u=".$db->getLastId()."&key=".$actkey, $message) ;
 				$message = str_replace("[SITENAME]", getSetting("sitename", $db), $message) ;
 				$headers = "From: \"".getSetting("default_from", $db)."\" <".getSetting("contact_email", $db).">>\r\n"."Reply-To: ".getSetting("contact_email", $db)."\r\n"."X-Mailer: PHP/".phpversion() ;
 			
 				echo "<div id='home'><h2>New Registration</h2></div> <h4>An e-mail has been sent to the address you supplied with instructions on how to complete the registration process.<br/>Thankyou for registering.</h4>" ;
-				$ans = mymail(array(array("email"=>$email, "name"=>$username)), 'Activation required', $message, $headers) ;
+				$ans = sendmail(array(array("email"=>$email, "name"=>$username)), 'Activation required', $message, $headers) ;
 				echo $ans."<br />" ;
 				$halt = true ;
 			

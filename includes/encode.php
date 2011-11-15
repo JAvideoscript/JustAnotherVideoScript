@@ -168,10 +168,79 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 				rename($rootpath."uploads/encode/origineel".$orirand.".".$ext, $rootpath."uploads/encode/".$originalname) ;
 			}
 
+
 			if (getSetting("autoacceptvideo", $db) == '0') {
 				$status = "false" ;
+				//send mail to admin there is a new video uploaded
+					if (getSetting("mail_video_admin", $db) == '1') {
+						$msg = getEmailformat("email_approved_admin") ;
+						$msg = str_replace(array('[TITLE]', '[POSTER]', '[SITEURL]'), array($value['title'], $value['poster'], $sitepath), $msg);
+						sendmail(array(array("email"=>getSetting("contact_email", $db), "name"=>getSetting("default_from", $db))), 'New Video waiting for approvement', $msg) ;
+					}
 			} else {
 				$status = "true" ;
+					if (getSetting("mail_video_approved", $db) == '1') {
+						$msg = getEmailformat("email_approved") ;
+						$msg = str_replace(array('[TITLE]', '[SITENAME]', '[MEDIALINK]', '[SITEURL]', '[USERNAME]'), array($value['title'], getSetting("sitename", $db), $sitepath."play/".url_encode($value['title']), $sitepath, $value['poster']), $msg);
+
+
+						$db->query("SELECT email, username FROM member WHERE USERNAME = '".$value['poster']."' LIMIT 1") ;
+						$member = $db->fetch() ;
+						sendmail(array(array("email"=>$member['email'], "name"=>$member['username'])), 'Video Approved', $msg) ;
+					}
+				//send mail to subscribed users
+					if (getSetting("mail_friend_subscribed", $db) == '1') {
+						$db->query("SELECT id FROM member WHERE USERNAME = '".$value['poster']."' LIMIT 1") ;
+						$memberid = $db->fetch() ;
+
+						$msg = getEmailformat("email_approved_subscriber") ;
+						$msg = str_replace(array('[TITLE]', '[SITENAME]', '[MEDIALINK]', '[SITEURL]', '[POSTER]'), array($value['title'], getSetting("sitename", $db), $sitepath."play/".url_encode($value['title']), $sitepath, $value['poster']), $msg);
+
+
+						$db->query("SELECT * FROM subscription WHERE userid = '".$memberid['id']."'");
+						$subscripids = $db->fetchAll() ;
+						$subarray = array() ;
+
+						foreach($subscripids as $subvalue) {
+							$db->query("SELECT email, username FROM member WHERE id = '".$subvalue['subscribedtoid']."' LIMIT 1") ;
+							$subinfo = $db->fetch() ;
+							array_push($subarray, array("email"=>$subinfo['email'], "name"=>$subinfo['username']));
+						}
+						sendmail($subarray, $value['poster'].' Uploaded a new video', $msg) ;
+					}
+				//send mail to friend of users
+					if (getSetting("mail_video_friends", $db) == '1') {
+						$db->query("SELECT id FROM member WHERE USERNAME = '".$value['poster']."' LIMIT 1") ;
+						$memberid = $db->fetch() ;
+						$db->query("SELECT * FROM friend WHERE (userid = '".$memberid['id']."' OR friendid = '".$memberid['id']."') AND friend_approved = '1'");
+						$friendids = $db->fetchAll() ;
+
+						$msg = getEmailformat("email_approved_friend") ;
+						$msg = str_replace(array('[TITLE]', '[SITENAME]', '[MEDIALINK]', '[SITEURL]', '[POSTER]'), array($value['title'], getSetting("sitename", $db), $sitepath."play/".url_encode($value['title']), $sitepath, $value['poster']), $msg);
+
+
+						$friarray = array() ;
+						foreach($friendids as $frivalue) {
+							if ($memberid['id'] != $frivalue['userid']) {
+								$db->query("SELECT email, username, friendmail_privacy FROM member WHERE id = '".$frivalue['userid']."' LIMIT 1") ;
+								$friinfo = $db->fetch() ;
+									if ($friinfo['friendmail_privacy'] != '0') {
+										array_push($friarray, array("email"=>$friinfo['email'], "name"=>$friinfo['username']));
+									}
+							}
+							if ($memberid['id'] != $frivalue['friendid']) {
+								$db->query("SELECT email, username, friendmail_privacy FROM member WHERE id = '".$frivalue['friendid']."' LIMIT 1") ;
+								$friinfo = $db->fetch() ;
+									if ($friinfo['friendmail_privacy'] != '0') {
+										array_push($friarray, array("email"=>$friinfo['email'], "name"=>$friinfo['username']));
+									}
+							}
+						}
+						sendmail($friarray, $value['poster'].' Uploaded a new video', $msg) ;
+					}
+
+
+
 			}
 
 

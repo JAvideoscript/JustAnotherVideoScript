@@ -159,6 +159,8 @@ if (is_writable('modules/settings.inc')) {
 	$Fw_uploads_incl_adm = $red;
 }
 
+
+
 $df = disk_free_space($rootpath);
 $dt = disk_total_space($rootpath);
 $du = $dt - $df;
@@ -196,6 +198,8 @@ $dt = formatSize($dt);
             margin: 3px 0;
     }
 </style>
+
+			
 <fieldset>
 	<ol>	
 	
@@ -214,7 +218,7 @@ $dt = formatSize($dt);
 		</li>	
 		<li>
 			<h2>Account overview</h2>
-		</li>
+		</li>	
 		<li>
 			<label>Number of approved videos:</label> 
 			<label><?=$numvideostrue?></label>

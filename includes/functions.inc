@@ -6,7 +6,31 @@
  *    Come to website for support or buying additional plugins/modules.
  *    http://justanothervideoscript.com/	
  */
- function checkmail($mail) {
+function sendmail($to, $subject, $message) {
+	global $db,$sitepath ;
+	$headers = "From: \"".getSetting('default_from', $db)."\" <".getSetting("contact_email", $db).">>\r\n"."Reply-To: ".getSetting("contact_email", $db)."\r\n"."X-Mailer: PHP/".phpversion() ;
+	foreach ($to as $mail) {
+		echo "<h4>Mailing To: <b>".$mail['name'].", </b>@<b> ".$mail['email']."</b></h4>" ;
+		$msg = str_replace('[USERNAME]', $mail['name'], $message) ;
+		$msg = str_replace('[EMAIL]', $mail['email'], $msg) ;
+		$msg = str_replace('[SITENAME]', getSetting('sitename', $db), $msg) ;
+		$sub = str_replace('[USERNAME]', $mail['name'], $subject) ;
+		$sub = str_replace('[EMAIL]', $mail['email'], $sub) ;
+		$sub = str_replace('[SITENAME]', getSetting('sitename', $db), $sub) ;
+		mail($mail['email'], $sub, $msg, $headers) ;
+	}
+	
+}	
+function getEmailformat($email) {
+	global $db ;
+	$db->query("SELECT phrase FROM `email_text` WHERE ident = '$email'") ;
+	$res = $db->fetch() ;
+	if (isset($res['phrase']))
+		return $res['phrase'] ;
+	else
+		return "" ;
+}
+function checkmail($mail) {
      $email_host = explode("@", $mail);
      $email_host = $email_host['1'];
      $email_resolved = gethostbyname($email_host);
@@ -82,15 +106,6 @@ function getSetting($setting, $db) {
 	$db->query("SELECT `value` FROM `setting` WHERE `setting` = '$setting'") ;
 	$res = $db->fetch() ;
 	return $res['value'] ;
-}
-function getEmail($email) {
-	global $db ;
-	$db->query("SELECT phrase FROM `email_text` WHERE ident = '$email'") ;
-	$res = $db->fetch() ;
-	if (isset($res['phrase']))
-		return $res['phrase'] ;
-	else
-		return "" ;
 }
 function show_rating($id) {
 	global $db,$templateimagepath,$sitepath ;

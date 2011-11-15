@@ -212,4 +212,31 @@ function formatSize( $bytes )	{
         for( $i = 0; $bytes >= 1024 && $i < ( count( $types ) -1 ); $bytes /= 1024, $i++ );
 	return( round( $bytes, 2 ) . " " . $types[$i] );
 }
+function sendmail($to, $subject, $message) {
+	global $db,$sitepath ;
+	$headers = "From: \"".getSetting('default_from', $db)."\" <".getSetting("contact_email", $db).">>\r\n"."Reply-To: ".getSetting("contact_email", $db)."\r\n"."X-Mailer: PHP/".phpversion() ;
+	foreach ($to as $mail) {
+		echo "<h4>Mailing To: <b>".$mail['name'].", </b>@<b> ".$mail['email']."</b></h4>" ;
+		$msg = str_replace('[USERNAME]', $mail['name'], $message) ;
+		$msg = str_replace('[EMAIL]', $mail['email'], $msg) ;
+		$msg = str_replace('[SITENAME]', getSetting('sitename', $db), $msg) ;
+		$sub = str_replace('[USERNAME]', $mail['name'], $subject) ;
+		$sub = str_replace('[EMAIL]', $mail['email'], $sub) ;
+		$sub = str_replace('[SITENAME]', getSetting('sitename', $db), $sub) ;
+		mail($mail['email'], $sub, $msg, $headers) ;
+	}
+	
+}	
+function getEmailformat($email) {
+	global $db ;
+	$db->query("SELECT phrase FROM `email_text` WHERE ident = '$email'") ;
+	$res = $db->fetch() ;
+	if (isset($res['phrase']))
+		return $res['phrase'] ;
+	else
+		return "" ;
+}
+
+
+
 ?>

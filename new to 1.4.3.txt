@@ -1,0 +1,63 @@
+- Added Status of harddisk space to admin panel.
+- Forgot Password? Made visible in brown template.
+- Added mail support for:
+	- when user uploads a video and it's approved he gets a mail
+	- when user uploads a video admin gets mail if it needs approval
+	- when user uploads a video subscribers to that user get a mail
+	- when user uploads a video friends of user get a mail with new video (this can be turned off in there 'account management'->'privacy')
+	- When admin reject a video uploader gets a mail
+Next:
+	- When admin approves video, uploader get's mail and the subscribers and friends of uploader.
+	- When user gets friend request
+	- When user gets private message from friend
+
+
+
+changes to files:
+emailtext.inc
+adminfunctions.inc
+status.inc
+encode.php
+embed.inc
+forgot.inc
+signup.inc
+functions.inc
+memberprivacy.inc
+
+Changes in DB:
+//add to settings
+
+mail_video_admin
+mail_video_approved 
+mail_video_rejected
+mail_video_friends
+mail_friend_request
+mail_friend_pm
+mail_friend_subscribed
+
+//add to email tabel
+
+
+//addchange member tabel
+
+add friendmail_privacy
+remove lookingfor
+
+
+[USERNAME], [PASSWORD], [POSTER], [MEDIALINK], [SITENAME], [SITEURL], [ACTLINK], [TITLE]
+
+
+SQL to upgrade.php
+
+ALTER TABLE member ADD friendmail_privacy INT(2) NOT NULL default '1' AFTER banned;
+ALTER TABLE member DROP lookingfor
+TRUNCATE TABLE email_text
+
+INSERT INTO `setting` VALUES 
+('mail_video_admin','1'),
+('mail_video_approved','1'),
+('mail_video_rejected','1'),
+('mail_video_friends','1'),
+('mail_friend_request','1'),
+('mail_friend_pm','1'),
+('mail_friend_subscribed','1');

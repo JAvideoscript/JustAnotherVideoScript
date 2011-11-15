@@ -27,7 +27,10 @@ include_once "includes/memberprivacy.inc" ;
 		<input type="radio" name="historyview" VALUE="0" <?=$curshow?>> show <br> <input type="radio" name="historyview" VALUE="1" <?=$curhide?>> hide <br>
 	</label>	
 
-
+	<label>
+		Get email from friends when they uploaded email:<br>
+		<input type="radio" name="friendmail" VALUE="0" <?=$fmailshow?>> Yes <br> <input type="radio" name="friendmail" VALUE="1" <?=$fmailhide?>> No <br>
+	</label>
 
 	<label>
 		<input type="submit" class="button" name="submit" value="Change" />	

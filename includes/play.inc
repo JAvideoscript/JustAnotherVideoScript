@@ -218,12 +218,12 @@ if ($vrw != "") {
 				var so = new SWFObject("'.$sitepath.'player/jwplayer/player.swf","mpl","600","480","9");
 				so.addParam("allowscriptacces","always");
 				so.addParam("allowfullscreen","true");
-				so.addParam("wmode","opaque");
-				so.addParam("flashvars","file='.$sitepath.'uploads/vids/'.$videores['fileid'].'/'.$videores['fileid'].'.flv'.$hd.'&amp;skin='.$sitepath.'player/jwplayer/skin/'.$skinname.'&amp;autostart=true&amp;dock=false&amp;provider=http&amp;stretching=false");
+				so.addParam("wmode","opaque");			
+				so.addParam("flashvars","file='.$sitepath.'uploads/vids/'.$videores['fileid'].'/'.$videores['fileid'].'.flv'.$hd.'&amp;skin='.$sitepath.'player/jwplayer/skin/'.$skinname.'&amp;autostart=true&amp;dock=false&amp;provider=http&amp;stretching=false&amp;plugins=viral-3");
 				so.write("player");
 				</script>'; 
 
-				$medialink = $pagelink;	
+				$medialink = $pagelink;	 
 			} 
 
 	}

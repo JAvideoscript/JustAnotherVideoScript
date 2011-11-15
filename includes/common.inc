@@ -12,19 +12,8 @@ require_once "includes/imagefunctions.inc" ;
 $sitefolder = getSetting("sitefolder", $db) ;
 $sitetemplate = getSetting("sitetemplate", $db) ;
 $sitepath = "http://".$_SERVER['SERVER_NAME'].$sitefolder ;
-function templateimagepath() {
-	global $templateimagepath ;
-	return $templateimagepath ;
-}
-function getTagLinks($tags) {
-	global $sitepath ;
-	$tagwords = explode(",", $tags) ;
-	$taglinks = '&nbsp;&nbsp;' ;
-	foreach ($tagwords as $tagword) {
-		$taglinks .= "<a href='".$sitepath."search/".urlencode($tagword)."'>$tagword</a>&nbsp;" ;
-	}
-	return $taglinks ;
-}
+
+
 function datez_diff($str_start, $str_end) {
 	$defdate = $str_start ;
 	$str_start = strtotime($str_start) ;
@@ -80,38 +69,6 @@ function last30days() {
 	$result = mktime(0, 0, 0, date("m"), date("d") - 30, date("Y")) ;
 	return $result ;
 }
-function resizeImage($filename, $extension, $max_width, $max_height = '', $newfilename = "", $withSampling = true) {
-	if ($newfilename == "")
-		$newfilename = $filename.'.'.$extension ;
-	// Get new sizes
-	list($width, $height) = getimagesize($filename.'.'.$extension) ;
-	echo "<font size=1>".$filename.'.'.$extension."</font>" ;
-	if ($width <= $max_width)
-		$max_width = $width ;
-	$percent = $max_width / $width ;
-	$newwidth = $width * $percent ;
-	if ($max_height == '') {
-		$newheight = $height * $percent ;
-	}
-	else
-		$newheight = $max_height ;
-	// Load
-	$thumb = imagecreatetruecolor($newwidth, $newheight) ;
-	if ($extension == 'jpg' || $extension == 'jpeg')
-		$source = imagecreatefromjpeg($filename.'.'.$extension) ;
-	if ($extension == 'gif')
-		$source = imagecreatefromgif($filename.'.'.$extension) ;
-	if ($extension == 'png')
-		$source = imagecreatefrompng($filename.'.'.$extension) ;
-	if ($extension == 'bmp')
-		$source = imagecreatefrombmp($filename.'.'.$extension) ;
-	// Resize
-	if ($withSampling)
-		imagecopyresampled($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height) ;
-	else
-		imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height) ;
-	return imagejpeg($thumb, $newfilename) ;
-}
 function force_length($string, $length) {
 	if (strlen($string) > $length)
 		$string = substr($string, 0, $length - 3)."..." ;
@@ -121,20 +78,8 @@ function alphaNum($string) {
 	$new_string = preg_replace("/[^a-zA-Z0-9s[:space:]*]/", "", $string) ;
 	return $new_string ;
 }
-function alphaNumComma($string) {
-	$new_string = preg_replace("/[^a-zA-Z0-9s[:space:],]/", "", $string) ;
-	return $new_string ;
-}
+//make captcha work
 require_once 'includes/captcha.jpg' ;
-function getUserID($un) {
-	global $db ;
-	$db->query("SELECT id FROM member WHERE username = '$un'") ;
-	$res = $db->fetch() ;
-	if ($db->numRows() == 0)
-		return 0 ;
-	return $res['id'] ;
-}
-
 if ($loggedIn) {
 	$db->query("SELECT * FROM member WHERE username = '".quote_smart($_SESSION['session_username'])."'") ;
 	$resUID = $db->fetch() ;
@@ -184,21 +129,6 @@ if ($loggedIn) {
 		$numSubs = 0 ;
 		$numVids = 0 ;
 		$numMessages = 0 ;
-	}
-}
-function mymail($to, $subject, $message, $headers) {
-	if (class_exists("mysql")) {
-		$db = db_connect() ;
-	}
-	foreach ($to as $mail) {
-		echo "<h4>Mailing To: <b>".$mail['name'].", </b>@<b> ".$mail['email']."</b></h4>" ;
-		$msg = str_replace('[USERNAME]', $mail['name'], $message) ;
-		$msg = str_replace('[EMAIL]', $mail['email'], $msg) ;
-		$msg = str_replace('[SITENAME]', getSetting('sitename', $db), $msg) ;
-		$sub = str_replace('[USERNAME]', $mail['name'], $subject) ;
-		$sub = str_replace('[EMAIL]', $mail['email'], $sub) ;
-		$sub = str_replace('[SITENAME]', getSetting('sitename', $db), $sub) ;
-		mail($mail['email'], $sub, $msg, $headers) ;
 	}
 }
 

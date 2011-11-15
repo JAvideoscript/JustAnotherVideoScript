@@ -14,6 +14,16 @@ if (!$loggedIn) {
 	$res = $db->fetch() ;
 	$curshowhide = $res['optoutofviewerlist'] ;
 	$curprivacy = $res['profile_privacy'] ;
+	$friendmail = $res['friendmail_privacy'] ;
+	
+	switch($friendmail) {
+		case '0':
+			$fmailhide = ' CHECKED' ;
+		break ;
+		case '1':
+			$fmailshow = ' CHECKED' ;
+		break ;	
+	}	
 	
 	switch($curshowhide) {
 		case '0':
@@ -38,6 +48,23 @@ if (!$loggedIn) {
 	if (isset($_POST['submit'])) { 		
 		$curprivacy = quote_smart($_POST['privacy']) ;
 		$curshowhide = quote_smart($_POST['historyview']) ;
+		$friendmail = quote_smart($_POST['friendmail']) ;
+		
+		switch($friendmail) {
+			case '0':
+				$db->query("UPDATE member SET friendmail_privacy = 1 WHERE `username` = '".quote_smart($_SESSION['session_username'])."'") ;
+				$fmailshow = ' CHECKED' ;
+				$fmailhide = ' ' ;
+			break ;	
+			case '1':
+				$db->query("UPDATE member SET friendmail_privacy = 0 WHERE `username` = '".quote_smart($_SESSION['session_username'])."'") ;
+				$fmailshow = ' ' ;
+				$fmailhide = ' CHECKED' ;
+			break ;	
+		}		
+		
+		
+		
 		
 		switch($curshowhide) {
 			case '0':

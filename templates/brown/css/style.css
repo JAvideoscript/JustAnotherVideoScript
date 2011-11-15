@@ -186,6 +186,22 @@ form, input, select, textarea {
     margin: 0;
     padding: 0;
 }
+div.box2 {
+    background: none repeat scroll 0 0 #432404;
+    border: 1px solid #ad794a;
+    margin: 0;
+    position: relative;
+    width: 200px;
+}
+div.box2 .input_text {
+    background: none repeat scroll 0 0 #432404;
+    border-color: #ad794a;
+    color: #ad794a;
+    border-style: double;
+    border-width: 1px;
+    padding: 10px;
+    width: 200px;
+}
 div.box {
     background: none repeat scroll 0 0 #432404;
     border: 1px solid #ad794a;
@@ -223,6 +239,9 @@ div.box label span {
     padding: 5px 20px 0 0;
     text-align: right;
     width: 100px;
+}
+div.box label span a {
+    color: #AD794A;
 }
 div.box label green {
     color: #16F249;

@@ -51,6 +51,7 @@ if ($valid == "yes") {
 		}
 	}
 	$added = time() ;
+	//maybe in the future add auto accept and approve mail. its better to check embedded shit first for security and spam
 	$status = "false" ;
 	
 $sql = "INSERT INTO `media` (title, category, description, tags, fileid, poster, added, status, embed, mediatype) VALUES ('".$title."', '".$catergory."', '".$description."', '".$tags."', '".$encodeset."', '".$poster."', '".$added."', '".$status."', '".$embedcode."', 'embed')" ;

@@ -15,6 +15,17 @@ if ($_POST['massfunc'] !== "") {
 			foreach ($resv as $resCheck) {
 				if (isset($_POST['check_all_user'.$resCheck['id']])) {
 					$fileid = $resCheck['fileid'] ;
+					//send mail to poster video is rejected before deleting all video info
+					if (getSetting("mail_video_rejected", $db) == '1') {
+						$msg = getEmailformat("email_rejected") ;
+						
+						$db->query("SELECT title, poster FROM media WHERE id = '".$resCheck['id']."' LIMIT 1") ;
+						$mediainfo = $db->fetch() ;
+						$db->query("SELECT email FROM member WHERE username = '".$mediainfo['poster']."' LIMIT 1") ;
+						$mailinfo = $db->fetch() ;
+						$msg = str_replace(array('[TITLE]', '[POSTER]', '[SITEURL]', '[SITENAME]'), array($mediainfo['title'], $mediainfo['poster'], $sitepath, getSetting("sitename", $db)), $msg);
+						sendmail(array(array("email"=>$mailinfo['email'], "name"=>$mediainfo['poster'])), 'Video Redjected', $msg) ;
+					}
 					if ($resCheck['mediatype'] == "video") {
 						if ($resCheck['hd'] == "1") {
 							unlink($rootpath."uploads/vids/".$fileid."/".$fileid.".mp4") ;
@@ -33,7 +44,7 @@ if ($_POST['massfunc'] !== "") {
 						$deleteid = $resCheck['id'] ;
 						$db->query("DELETE FROM `media` WHERE id = '".$deleteid."'") ;
 						echo "Deleted Video with id: $deleteid <br>" ;
-					}
+					}					
 				}
 			}
 	}
@@ -45,6 +56,8 @@ if ($_POST['massfunc'] !== "") {
 				$approveid = $resCheck['id'] ;
 				$db->query("UPDATE `media` SET `status` = 'true' WHERE id = '".$approveid."'") ;
 				echo "Approved Video with id: $approveid <br>" ;
+				//send mail to the poster, subscripber and friends
+				
 			}
 		}
 	}
@@ -70,6 +83,7 @@ $row = $db->fetchAll() ;
 	echo "<td><select name='massfunc'>" ;
 	echo "<option value='deleteall'>Delete all selected</option>" ;
 	echo "<option value='approve' selected>Approve all selected</option>" ;	
+	
 	echo "</select></td><td><input class='biggerbutton' type='submit' value='Go'></td></tr></table>" ;
 	echo "<table width='850px' cellspacing='1' cellpadding='3' border='1'><tr>" ;
 	echo "<td align='left' width='10px'><b><input type='checkbox' name='checkall' onclick='checkUncheckAll(this);'/></b></td>" ;

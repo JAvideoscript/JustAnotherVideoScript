@@ -18,7 +18,7 @@ if (!Beveiliging()){
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <title>JAVS Admin</title>
-<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/ddaccordion.js"></script>
 <script type="text/javascript">
 ddaccordion.init({
@@ -87,6 +87,7 @@ ddaccordion.init({
 				<li><a href="main.php?do=youtubeembed">Youtube Embed</a></li>
 				<li><a href="main.php?do=s2s">Server2Server</a></li>
 				<li><a href="main.php?do=massimport">Mass import</a></li>
+				<li><a href="main.php?do=videodownloader">videodownloader</a></li>
 			</ul>
 		</div>
 	<a class="menuitem submenuheader" href="#">SEO</a>
