@@ -23,6 +23,7 @@ forgot.inc
 signup.inc
 functions.inc
 memberprivacy.inc
+.htaccess
 
 Changes in DB:
 //add to settings

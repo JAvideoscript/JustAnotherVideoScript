@@ -6,7 +6,7 @@
  *    Come to website for support or buying additional plugins/modules.
  *    http://justanothervideoscript.com/
  */
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 include_once("../includes/settings.inc");
 include_once("../includes/mysql.inc");
 include_once("../includes/functions.inc");
@@ -45,8 +45,6 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 			$encodesize = getSetting("encodesize", $db) ;
 			$ffmpegpath = getSetting("ffmpegpath", $db) ;
 			$flvtool2path = getSetting("flvtool2path", $db) ;
-			$lw = getSetting("thumb_w1", $db) ;
-			$lh = getSetting("thumb_h1", $db) ;
 			$videoaspect = getSetting("videoaspect", $db) ;
 			$getvinfo = getvidinfo($rootpath."uploads/encode/".$fileid,$ffmpegpath) ;
 			if(empty($getvinfo)) {
@@ -57,27 +55,18 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 			$orirand = mt_rand(5, 5000);
 
 			rename($rootpath."uploads/encode/".$filename_without_ext.".".$ext, $rootpath."uploads/encode/origineel".$orirand.".".$ext) ;
-
+			echo 'start encoding<br>';
 			switch($ext){
 				case "flv":
 						if ($noinfo == "true") {
 							if (($getvinfo['width'] >= "600") || ($getvinfo['height'] >= "480")) {
+								echo 'flv 1<br>';
 								exec($ffmpegpath." -i ".$rootpath."uploads/encode/origineel".$orirand.".".$ext." -ar ".$audiofrequency." -ab ".$audiobitrate."k -aspect ".$videoaspect." -b ".$videobitrate."k -r ".$framerate." -f flv -y -s ".$encodesize." -acodec libfaac -ac 1 ".$rootpath."uploads/encode/".$filename_without_ext.".flv 2>&1", $res1, $err) ;
 							}
+						} else {
+								echo 'flv 2<br>';
+								rename($rootpath."uploads/encode/origineel".$orirand.".".$ext, $rootpath."uploads/encode/".$filename_without_ext.".flv");
 						}
-						if (file_exists($rootpath.'uploads/encode/'.$filename_without_ext.'.flv')) {
-							exec($ffmpegpath." -y -i ".$rootpath."uploads/encode/".$filename_without_ext.".flv -f mjpeg -s ".$lw."x".$lh." -vframes 1 -ss ".$thumbtime." -an ".$rootpath."uploads/thumbs/".$filename_without_ext.".jpg 2>&1", $res2, $err) ;
-							chmod($rootpath."uploads/thumbs/".$filename_without_ext.".jpg", 0755) ;
-							$duration = getduration($rootpath."uploads/encode/".$filename_without_ext.".".$ext) ;
-							exec($flvtool2path." -U ".$rootpath."uploads/encode/".$filename_without_ext.".".$ext." 2>&1", $res3, $err) ;
-						}
-						if (file_exists($rootpath.'uploads/encode/origineel'.$orirand.'.flv')) {
-							exec($ffmpegpath." -y -i ".$rootpath."uploads/encode/origineel".$orirand.".flv -f mjpeg -s ".$lw."x".$lh." -vframes 1 -ss ".$thumbtime." -an ".$rootpath."uploads/thumbs/".$filename_without_ext.".jpg 2>&1", $res2, $err) ;
-							chmod($rootpath."uploads/thumbs/".$filename_without_ext.".jpg", 0755) ;
-							$duration = getduration($rootpath."uploads/encode/origineel".$orirand.".".$ext) ;
-							exec($flvtool2path." -U ".$rootpath."uploads/encode/origineel".$orirand.".".$ext." 2>&1", $res3, $err) ;
-						}
-
 				break;
 				case "wmv":
 				case "mov":
@@ -94,23 +83,27 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 						}
 					}
 						exec($ffmpegpath." -y -i ".$rootpath."uploads/encode/origineel".$orirand.".".$ext." -ab ".$audiobitrate."k -b ".$videobitrate."k -f flv -s ".$encodesize." -acodec libfaac -ac 1 ".$rootpath."uploads/encode/".$filename_without_ext.".flv 2>&1", $res4, $err) ;
-						exec($ffmpegpath." -y -i ".$rootpath."uploads/encode/origineel".$orirand.".".$ext." -f mjpeg -s ".$lw."x".$lh." -vframes 1 -ss ".$thumbtime." -an ".$rootpath."uploads/thumbs/".$filename_without_ext.".jpg 2>&1", $res5, $err) ;
-
-							if (filesize($rootpath.'uploads/thumbs/'.$filename_without_ext.'.jpg') == "0") {
-								unlink($rootpath.'uploads/thumbs/'.$filename_without_ext.'.jpg') ;
-							}
-							if (file_exists($rootpath.'uploads/thumbs/'.$filename_without_ext.'.jpg')) {
-								chmod($rootpath."uploads/thumbs/".$filename_without_ext.".jpg", 0755) ;
-							}
-					if (file_exists($rootpath.'uploads/encode/'.$filename_without_ext.'.flv')) {
-						$duration = getduration($rootpath."uploads/encode/".$filename_without_ext.".flv") ;
-						exec($flvtool2path." -U ".$rootpath."uploads/encode/".$filename_without_ext.".flv") ;
-					}
-
 				break;
 			}
+			echo 'make dir<br>';
 			mkdir($rootpath."uploads/vids/".$filename_without_ext, 0755);
-			rename($rootpath."uploads/encode/".$filename_without_ext.".flv", $rootpath."uploads/vids/".$filename_without_ext."/".$filename_without_ext.".flv") ;
+			$newvideopath = $rootpath."uploads/vids/".$filename_without_ext."/".$filename_without_ext.".flv" ;
+
+			echo 'rename file<br><br>';
+			rename($rootpath."uploads/encode/".$filename_without_ext.".flv", $newvideopath) ;
+
+			if (file_exists($newvideopath)) {
+				//now get duration
+					$duration = getduration($newvideopath, 'site') ;
+				//now get thumbs
+					mkdir($rootpath."uploads/thumbs/".$filename_without_ext, 0755);
+					makethumbs($newvideopath, $rootpath."uploads/thumbs/".$filename_without_ext."/");
+				//now flvtool2 the video
+					exec($flvtool2path." -U ".$newvideopath) ;
+			}
+
+
+
 
 			if (getSetting("mobilevideo", $db) == '1') {
 				$esizeheight = getSetting("mobile_encodesize_height", $db) ; //default 320
@@ -250,57 +243,94 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 
 //making a log for trouble shooting
 
-if (getSetting("keepencodelog", $db) == '1') {
-	$logbook = '' ;
-	$encoderlog .= "<br><h1>res1 - Encodingname: big flv to smaller</h1><br>" ;
-	foreach ($res1 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res2 - Encodingname: Make flv thumb</h1><br>" ;
-	foreach ($res2 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res3 - Encodingname: Flvtool2 the flv file</h1><br>" ;
-	foreach ($res3 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res4 - Encodingname: encoding any file type into flv</h1><br>" ;
-	foreach ($res4 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res5 - Encodingname: Make thumb of any filetype </h1><br>" ;
-	foreach ($res5 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res6 - Encodingname: Mobile: Convert original into mobile file</h1><br>" ;
-	foreach ($res6 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res7 - Encodingname: HD: Make file to xh286 and mp4 and resize because of site settings</h1><br>" ;
-	foreach ($res7 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res8 - Encodingname: HD: Make file to xh286 and mp4 no resize file is small enough</h1><br>" ;
-	foreach ($res8 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res9 - Encodingname: HD: File is mp4 but to big for site settings</h1><br>" ;
-	foreach ($res9 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$encoderlog .= "<br><h1>res10 - Encodingname: HD: MP4box the mp4 file</h1><br>" ;
-	foreach ($res11 as $outputline) {
-		$encoderlog .= $outputline."<br>" ;
-	}
-	$outputpath = $rootpath."uploads/encodelogs/".$filename_without_ext.".html" ;
+		if (getSetting("keepencodelog", $db) == '1') {
+			$logbook = '' ;
+			$encoderlog .= "<br><h1>res1 - Encodingname: big flv to smaller</h1><br>" ;
+			foreach ($res1 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res2 - Encodingname: Make flv thumb</h1><br>" ;
+			foreach ($res2 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res3 - Encodingname: Flvtool2 the flv file</h1><br>" ;
+			foreach ($res3 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res4 - Encodingname: encoding any file type into flv</h1><br>" ;
+			foreach ($res4 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res5 - Encodingname: Make thumb of any filetype </h1><br>" ;
+			foreach ($res5 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res6 - Encodingname: Mobile: Convert original into mobile file</h1><br>" ;
+			foreach ($res6 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res7 - Encodingname: HD: Make file to xh286 and mp4 and resize because of site settings</h1><br>" ;
+			foreach ($res7 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res8 - Encodingname: HD: Make file to xh286 and mp4 no resize file is small enough</h1><br>" ;
+			foreach ($res8 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res9 - Encodingname: HD: File is mp4 but to big for site settings</h1><br>" ;
+			foreach ($res9 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$encoderlog .= "<br><h1>res10 - Encodingname: HD: MP4box the mp4 file</h1><br>" ;
+			foreach ($res11 as $outputline) {
+				$encoderlog .= $outputline."<br>" ;
+			}
+			$outputpath = $rootpath."uploads/encodelogs/".$filename_without_ext.".html" ;
 
-	$file = fopen($outputpath, "w") ;
-	fwrite($file, $encoderlog) ;
-	fclose($file) ;
+			$file = fopen($outputpath, "w") ;
+			fwrite($file, $encoderlog) ;
+			fclose($file) ;
+		}
+}
+
+function makethumbs($basevid,$pathtothumb) {
+	global $db, $ffmpegpath;
+	$lw = getSetting("thumb_w1", $db) ;
+	$lh = getSetting("thumb_h1", $db) ;
+
+
+
+//how many thumbs we want
+	$thumbsnumber = '12';
+//we dont want an end thumb so we take of 2 precent
+	$vid_duration_sec = (getduration($basevid, 'sec') / 100) * 98;
+
+	echo $vid_duration_sec.' total<br>';
+
+//now we make the thumbs
+	for ($b = 1; $b <= $thumbsnumber; $b++) {
+		$thumbtime = round(($vid_duration_sec / $thumbsnumber) * $b);
+		$imagepath = $pathtothumb.$b.".jpg" ;
+
+		echo $thumbtime.' thumbtime<br>';
+		echo $basevid.' thumbtime<br>';
+
+		exec($ffmpegpath." -y -i ".$basevid." -f mjpeg -s ".$lw."x".$lh." -vframes 1 -ss ".$thumbtime." -an ".$imagepath." 2>&1", $res2, $err) ;
+
+
+		if (filesize($imagepath) == "0") {
+			//unlink($imagepath) ;
+		}
+		if (file_exists($imagepath)) {
+			chmod($imagepath, 0755);
+		}
+	}
+
 }
 
 
-		}
+
+
 
 //functions
 function getvidinfo($file,$ffmpegpath) {
@@ -320,7 +350,7 @@ function getvidinfo($file,$ffmpegpath) {
     return $dimensions;
 }
 
-function getduration($my_file2) {
+function getduration($my_file2, $format) {
 	if (file_exists($my_file2)) {
 		$handle = fopen($my_file2, "r");
 		$contents = fread($handle, filesize($my_file2));
@@ -328,6 +358,7 @@ function getduration($my_file2) {
 			if (strlen($contents) > $make_hexa) {
 				$pre_duration = hexdec(bin2hex(substr($contents,strlen($contents)-$make_hexa,3))) ;
 				$post_duration = $pre_duration/1000 ;
+				$returnsec = round($post_duration);
 				$timehours = $post_duration/3600 ;
 				$timeminutes =($post_duration % 3600)/60 ;
 				$timeseconds = ($post_duration % 3600) % 60 ;
@@ -346,6 +377,13 @@ function getduration($my_file2) {
 					}
 		}
 	}
-return $duration ;
+	switch($format) {
+		case "sec":
+			return $returnsec ;
+		break;
+		case "site":
+			return $duration ;
+		break;
+	}
 }
 ?>

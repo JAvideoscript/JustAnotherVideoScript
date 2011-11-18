@@ -36,8 +36,8 @@ RewriteRule ^top-rated/([0-9]+)/?$ index.php?id=2&page=$1 [L]
 
 RewriteRule ^most-viewed/?$ index.php?id=3 [L]
 RewriteRule ^most-viewed/([0-9]+)/?$ index.php?id=3&page=$1 [L]
-RewriteRule ^most-viewed/-([^/]+)/?$ index.php?id=3&filter=$1 [L]
-RewriteRule ^most-viewed/-([^/]+)/([0-9]+)/?$ index.php?id=3&filter=$1&page=$2 [L]
+RewriteRule ^most-viewed/([a-z]+)/?$ index.php?id=3&filter=$1 [L]
+RewriteRule ^most-viewed/([a-z]+)/([0-9]+)/?$ index.php?id=3&filter=$1&page=$2 [L]
 
 RewriteRule ^categories/?$ index.php?id=14 [L]
 
