@@ -35,7 +35,7 @@ if ($loggedIn) {
 				if ($db->numRows() >= 1) {
 					$title = $encodeset." ".$title ;
 				}
-				$sql = "INSERT INTO `media` (title, category, description, tags, fileid, poster, added, status, mediatype) VALUES ('".$title."', '".$catergorie."', '".$description."', '".$tags."', '".$fileid."', '".$poster."', '".$added."', '".$status."', 'video')" ;
+				$sql = "INSERT INTO `media` (title, category, description, tags, fileid, poster, added, status, mediatype, mainthumb) VALUES ('".$title."', '".$catergorie."', '".$description."', '".$tags."', '".$fileid."', '".$poster."', '".$added."', '".$status."', 'video', '1')" ;
 				$db->query($sql) ;
 				if (getSetting("directencode", $db) == '1') {
 					$cronpass = getSetting("passcron", $db) ;

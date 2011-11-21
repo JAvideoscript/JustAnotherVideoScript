@@ -35,9 +35,8 @@ function rotator() {
 		foreach ($res as $key=>$value) {	
 			$title = url_encode($value['title']) ;
 			$url = $sitepath.'play/'.$title ;
-			$img = $sitepath."uploads/thumbs/".$value['fileid'].".jpg" ;
-			$output .= '<li><a href="'.$url.'"><img src="'.$img.'" width="160" height="120" alt="'.$value['title'].'" /></a></li>' ;
-
+			$img = $sitepath."uploads/thumbs/".$value['fileid']."/".$value['mainthumb'].".jpg" ;
+			$output .= '<li><a href="'.$url.'"><img src="'.$img.'" width="160" height="120" alt="'.$value['title'].'" title="'.$value['title'].'" id="rotate_'.$value['fileid'].'_'.getSetting("thumbsnumber", $db).'_viewed" /></a></li>' ;
 		}
 	$output .= '</ul>' ;
 
@@ -45,28 +44,6 @@ return $output ;
 
 }
 
-function cyclemap() {
-	global $db,$sitepath ;
-	$output = '' ;
-	$output .= '<div id="cycleMap-buttons"><button id="cycleLeft">Left</button><button id="cycleRight">Right</button></div>';
-	$output .= '<div id="cycleMap">';
-	
-	$db->query("SELECT * FROM `media` WHERE `status` ='true' ORDER BY lastviewed DESC LIMIT 0,14") ;
-	$res = $db->fetchALL() ;
-		foreach ($res as $key=>$value) {
-			$title = url_encode($value['title']) ;
-			$url = $sitepath.'play/'.$title ;
-			$img = $sitepath."uploads/thumbs/".$value['fileid'].".jpg" ;
-	
-			$output .= '<img src="'.$img.'" href="'.$url.'" title="'.$value['title'].'" alt="'.$value['title'].'" />';
-	
-	
-		}
-	$output .= '</div>';
-
-return $output ;
-
-}
 
 function top5today() {
 	global $db,$sitepath ;
@@ -79,7 +56,7 @@ function top5today() {
 			$i++;
 			$title = url_encode($value['title']) ;
 			$url = $sitepath.'play/'.$title ;
-			$img = $sitepath."uploads/thumbs/".$value['fileid'].".jpg" ;
+			$img = $sitepath."uploads/thumbs/".$value['fileid']."/".$value['mainthumb'].".jpg" ;
 			$viewstoday = $value['dayviews'] ;
 			if ($viewstoday == '') {
 					$viewstoday = 0 ;
@@ -138,8 +115,7 @@ function latestupload() {
 	
 	
 	foreach ($res as $value) {
-		$thumbpath = $path.'uploads/thumbs/' ;
-		$thumb = $sitepath."uploads/thumbs/".$value['fileid'].".jpg" ;
+		$thumb = $sitepath."uploads/thumbs/".$value['fileid']."/".$value['mainthumb'].".jpg" ;
 			if ($thumb == '') {
 				$thumb = $templateimagepath."default_video_thumb.jpg" ;
 			}

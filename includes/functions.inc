@@ -6,11 +6,13 @@
  *    Come to website for support or buying additional plugins/modules.
  *    http://justanothervideoscript.com/	
  */
-function sendmail($to, $subject, $message) {
+function sendmail($to, $subject, $message, $mailinfo='no') {
 	global $db,$sitepath ;
 	$headers = "From: \"".getSetting('default_from', $db)."\" <".getSetting("contact_email", $db).">>\r\n"."Reply-To: ".getSetting("contact_email", $db)."\r\n"."X-Mailer: PHP/".phpversion() ;
 	foreach ($to as $mail) {
-		echo "<h4>Mailing To: <b>".$mail['name'].", </b>@<b> ".$mail['email']."</b></h4>" ;
+		if ($mailinfo != 'no') {
+			echo "<h4>Mailing To: <b>".$mail['name'].", </b>@<b> ".$mail['email']."</b></h4>" ;
+		}
 		$msg = str_replace('[USERNAME]', $mail['name'], $message) ;
 		$msg = str_replace('[EMAIL]', $mail['email'], $msg) ;
 		$msg = str_replace('[SITENAME]', getSetting('sitename', $db), $msg) ;

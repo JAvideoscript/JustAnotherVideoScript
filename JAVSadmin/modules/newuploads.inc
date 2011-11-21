@@ -23,7 +23,7 @@ if ($_POST['massfunc'] !== "") {
 						$mediainfo = $db->fetch() ;
 						$db->query("SELECT email FROM member WHERE username = '".$mediainfo['poster']."' LIMIT 1") ;
 						$mailinfo = $db->fetch() ;
-						$msg = str_replace(array('[TITLE]', '[POSTER]', '[SITEURL]', '[SITENAME]'), array($mediainfo['title'], $mediainfo['poster'], $sitepath, getSetting("sitename", $db)), $msg);
+						$msg = str_replace(array('[TITLE]', '[POSTER]', '[SITEURL]', '[SITENAME]'), array($mediainfo['title'], $mediainfo['poster'], $sitepath, getSetting("sitename", $db)), $msg);			
 						sendmail(array(array("email"=>$mailinfo['email'], "name"=>$mediainfo['poster'])), 'Video Redjected', $msg) ;
 					}
 					if ($resCheck['mediatype'] == "video") {
@@ -34,13 +34,28 @@ if ($_POST['massfunc'] !== "") {
 							unlink($rootpath."uploads/vids/".$fileid."/mob_".$fileid.".mp4") ;
 						}
 						unlink($rootpath."uploads/vids/".$fileid."/".$fileid.".flv") ;
-						unlink($rootpath."uploads/thumbs/".$fileid.".jpg") ;
 						rmdir($rootpath."uploads/vids/".$fileid."/") ;
+						
+						$thumbdir = $rootpath."uploads/thumbs/".$fileid."/" ;
+						if (file_exists($thumbdir)) {
+							foreach(glob($thumbdir.'*.*') as $v){
+								unlink($v);
+							}
+							rmdir($thumbdir);
+						}						
+						
 						$deleteid = $resCheck['id'] ;
 						$db->query("DELETE FROM `media` WHERE id = '".$deleteid."'") ;
 						echo "Deleted Video with id: $deleteid <br>" ;
 					} else {
-						unlink($rootpath."uploads/thumbs/".$fileid.".jpg") ;
+						$thumbdir = $rootpath."uploads/thumbs/".$fileid."/" ;
+						if (file_exists($thumbdir)) {
+							foreach(glob($thumbdir.'*.*') as $v){
+								unlink($v);
+							}
+							rmdir($thumbdir);
+						}						
+					
 						$deleteid = $resCheck['id'] ;
 						$db->query("DELETE FROM `media` WHERE id = '".$deleteid."'") ;
 						echo "Deleted Video with id: $deleteid <br>" ;
@@ -57,6 +72,79 @@ if ($_POST['massfunc'] !== "") {
 				$db->query("UPDATE `media` SET `status` = 'true' WHERE id = '".$approveid."'") ;
 				echo "Approved Video with id: $approveid <br>" ;
 				//send mail to the poster, subscripber and friends
+				
+					if (getSetting("mail_video_approved", $db) == '1') {
+						$msg = getEmailformat("email_approved") ;
+						$db->query("SELECT title, poster FROM media WHERE id = '".$resCheck['id']."' LIMIT 1") ;
+						$mediainfo = $db->fetch() ;
+						$db->query("SELECT email FROM member WHERE username = '".$mediainfo['poster']."' LIMIT 1") ;
+						$mailinfo = $db->fetch() ;
+						
+						$msg = str_replace(array('[TITLE]', '[POSTER]', '[MEDIALINK]', '[SITEURL]', '[SITENAME]'), array($mediainfo['title'], $mediainfo['poster'], $sitepath."play/".url_encode($mediainfo['title']),$sitepath, getSetting("sitename", $db)), $msg);
+						
+						sendmail(array(array("email"=>$mailinfo['email'], "name"=>$mediainfo['poster'])), 'Video Approved', $msg) ;
+					}							
+					if (getSetting("mail_friend_subscribed", $db) == '1') {
+						$db->query("SELECT title, poster FROM media WHERE id = '".$resCheck['id']."' LIMIT 1") ;
+						$mediainfo = $db->fetch() ;
+						$db->query("SELECT id, email FROM member WHERE username = '".$mediainfo['poster']."' LIMIT 1") ;
+						$mailinfo = $db->fetch() ;
+						
+						
+						$msg = getEmailformat("email_approved_subscriber") ;				
+						$msg = str_replace(array('[TITLE]', '[SITENAME]', '[MEDIALINK]', '[SITEURL]', '[POSTER]'), array($mediainfo['title'], getSetting("sitename", $db), $sitepath."play/".url_encode($mediainfo['title']), $sitepath, $mediainfo['poster']), $msg);
+						
+					
+						$db->query("SELECT userid FROM subscription WHERE subscribedtoid = '".$mailinfo['id']."'");
+						$subscripids = $db->fetchAll() ;				
+						$subarray = array() ;
+					
+							foreach($subscripids as $subvalue) {
+								$db->query("SELECT email, username FROM member WHERE id = '".$subvalue['userid']."' LIMIT 1") ;
+								$subinfo = $db->fetch() ;
+								array_push($subarray, array("email"=>$subinfo['email'], "name"=>$subinfo['username']));
+							}							
+						sendmail($subarray, $mediainfo['poster'].' Uploaded a new video', $msg) ;
+					}
+					if (getSetting("mail_video_friends", $db) == '1') {
+						$db->query("SELECT title, poster FROM media WHERE id = '".$resCheck['id']."' LIMIT 1") ;
+						$mediainfo = $db->fetch() ;
+						$db->query("SELECT id FROM member WHERE username = '".$mediainfo['poster']."' LIMIT 1") ;
+						$memberid = $db->fetch() ;				
+					
+						
+					
+						$msg = getEmailformat("email_approved_friend") ;
+						$msg = str_replace(array('[TITLE]', '[SITENAME]', '[MEDIALINK]', '[SITEURL]', '[POSTER]'), array($mediainfo['title'], getSetting("sitename", $db), $sitepath."play/".url_encode($mediainfo['title']), $sitepath, $mediainfo['poster']), $msg);
+						
+						
+						$db->query("SELECT * FROM friend WHERE (userid = '".$memberid['id']."' OR friendid = '".$memberid['id']."') AND friend_approved = '1'");
+						$friendids = $db->fetchAll() ;
+					
+						$friarray = array() ;
+							foreach($friendids as $frivalue) {
+								if ($memberid['id'] != $frivalue['userid']) {
+									$db->query("SELECT email, username, friendmail_privacy FROM member WHERE id = '".$frivalue['userid']."' LIMIT 1") ;
+									$friinfo = $db->fetch() ;
+									if ($friinfo['friendmail_privacy'] != '0') {
+										array_push($friarray, array("email"=>$friinfo['email'], "name"=>$friinfo['username']));
+									}
+								}						
+					
+								if ($memberid['id'] != $frivalue['friendid']) {
+									$db->query("SELECT email, username, friendmail_privacy FROM member WHERE id = '".$frivalue['friendid']."' LIMIT 1") ;
+									$friinfo = $db->fetch() ;
+									if ($friinfo['friendmail_privacy'] != '0') {
+										array_push($friarray, array("email"=>$friinfo['email'], "name"=>$friinfo['username']));
+									}
+								}							
+							}
+						sendmail($friarray, $mediainfo['poster'].' Uploaded a new video', $msg) ;
+					}
+					
+				
+				
+				
 				
 			}
 		}
@@ -108,7 +196,7 @@ $row = $db->fetchAll() ;
 		} else {
 			$mobilecheck = "no" ;
 		}
-		$thumb = "<img src='".$sitepath."uploads/thumbs/".$value['fileid'].".jpg' width='160px' height='120px'>" ;
+		$thumb = "<img src='".$sitepath."uploads/thumbs/".$value['fileid']."/1.jpg' width='160px' height='120px'>" ;
 			
 		
 		echo "<tr><td align='left'><b><input name='check_all_user".$value['id']."' type='checkbox'></b></td>" ;

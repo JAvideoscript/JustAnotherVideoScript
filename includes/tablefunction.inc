@@ -248,8 +248,7 @@ function Tableview($ulget, $res, $page = 1, $url = "", $filter = all) {
 					case '14':
 					case '15':
 					case '16':
-						$thumbpath = $path.'uploads/thumbs/' ;
-						$thumb = $sitepath."uploads/thumbs/".$value['fileid'].".jpg" ;
+						$thumb = $sitepath."uploads/thumbs/".$value['fileid']."/".$value['mainthumb'].".jpg" ;
 							if ($thumb == '') {
 								$thumb = $templateimagepath."default_video_thumb.jpg" ;
 							}
@@ -279,7 +278,7 @@ function Tableview($ulget, $res, $page = 1, $url = "", $filter = all) {
 							$viewstring = 0 ;
 						}
 						$output .= "<li>" ;
-						$output .= "<br /><a href='".$sitepath."play/".$title."'><img  src='".$thumb."' alt='".$title."' /></a>" ;
+						$output .= "<br /><a href='".$sitepath."play/".$title."'><img  src='".$thumb."' alt='".$title."' title='".$title."' id='rotate_".$value['fileid']."_".getSetting("thumbsnumber", $db)."_viewed' /></a>" ;
 						
 						$output .= "<div class=\"thumbholder\">" ;
 						$output .= "<a href='".$sitepath."play/".$title."'>".str_replace("-", " ", $shortTitle)."</a><br />" ;

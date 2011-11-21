@@ -236,7 +236,18 @@ function getEmailformat($email) {
 	else
 		return "" ;
 }
-
+function url_encode($url) {
+		$url = str_replace(' ', '-', $url) ;
+		$url = urlencode($url) ;
+		$url = urlencode($url) ;
+		return $url ;
+}
+function url_decode($url, $type = NULL, $pcat = NULL) {
+		$url = urldecode($url) ;
+		$url = urldecode($url) ;
+		$url = str_replace('-', ' ', $url) ;
+		return $url ;
+}
 
 
 ?>

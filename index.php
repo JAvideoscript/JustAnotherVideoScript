@@ -47,6 +47,8 @@ else {
 		<script type="text/javascript" src="<?=$sitepath?>js/jquery.min.js"></script>
 		<script type="text/javascript" src="<?=$sitepath?>js/jquery.combine.js"></script>
 		<script type="text/javascript" src="<?=$sitepath?>js/combinejs.js"></script>
+
+
     </head>
     <body>
         <div id="content-area">

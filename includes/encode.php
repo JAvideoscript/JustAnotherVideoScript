@@ -6,7 +6,7 @@
  *    Come to website for support or buying additional plugins/modules.
  *    http://justanothervideoscript.com/
  */
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 include_once("../includes/settings.inc");
 include_once("../includes/mysql.inc");
 include_once("../includes/functions.inc");
@@ -58,14 +58,19 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 			echo 'start encoding<br>';
 			switch($ext){
 				case "flv":
+						echo 'start flv<br>';
 						if ($noinfo == "true") {
 							if (($getvinfo['width'] >= "600") || ($getvinfo['height'] >= "480")) {
 								echo 'flv 1<br>';
 								exec($ffmpegpath." -i ".$rootpath."uploads/encode/origineel".$orirand.".".$ext." -ar ".$audiofrequency." -ab ".$audiobitrate."k -aspect ".$videoaspect." -b ".$videobitrate."k -r ".$framerate." -f flv -y -s ".$encodesize." -acodec libfaac -ac 1 ".$rootpath."uploads/encode/".$filename_without_ext.".flv 2>&1", $res1, $err) ;
-							}
-						} else {
-								echo 'flv 2<br>';
+							} else {
 								rename($rootpath."uploads/encode/origineel".$orirand.".".$ext, $rootpath."uploads/encode/".$filename_without_ext.".flv");
+								echo 'flv 2<br>';
+							}
+						}
+						if ($noinfo == "false") {
+								echo 'flv 3<br>';
+								exec($ffmpegpath." -i ".$rootpath."uploads/encode/origineel".$orirand.".".$ext." -ar ".$audiofrequency." -ab ".$audiobitrate."k -aspect ".$videoaspect." -b ".$videobitrate."k -r ".$framerate." -f flv -y -s ".$encodesize." -acodec libfaac -ac 1 ".$rootpath."uploads/encode/".$filename_without_ext.".flv 2>&1", $res1, $err) ;
 						}
 				break;
 				case "wmv":
@@ -77,6 +82,7 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 				case "mp4":
 				case "rm":
 				case "asf":
+					echo 'start other ext<br>';
 					if ($noinfo == "true") {
 						if (($getvinfo['width'] <= "600") || ($getvinfo['height'] <= "480") && ($noinfo == "true")) {
 							$encodesize = $getvinfo['width']."x".$getvinfo['height'] ;
@@ -141,9 +147,13 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 					if ((getSetting("maxresolution_w", $db) > $getvinfo['width']) || (getSetting("maxresolution_h", $db) > $getvinfo['height'])) {
 						$encodesize = getSetting("maxresolution_w", $db)."x".getSetting("maxresolution_h", $db) ;
 						exec($ffmpegpath." -i ".$rootpath."uploads/encode/origineel".$orirand.".".$ext." -y -f mp4 -s ".$encodesize." -vcodec libx264 -crf 28 -threads 0 -flags +loop -cmp +chroma -deblockalpha -1 -deblockbeta -1 -refs 3 -bf 3 -coder 1 -me_method hex -me_range 18 -subq 7 -partitions +parti4x4+parti8x8+partp8x8+partb8x8 -g 320 -keyint_min 25 -level 41 -qmin 10 -qmax 51 -qcomp 0.7 -trellis 1 -sc_threshold 40 -i_qfactor 0.71 -flags2 +mixed_refs+dct8x8+wpred+bpyramid -padcolor 000000 -padtop 0 -padbottom 0 -padleft 0 -padright 0 -acodec libfaac -ab 80kb -ar 48000 -ac 2 ".$rootpath."uploads/encode/".$filename_without_ext.".mp4 2>&1", $res9, $err) ;
-						rename($rootpath."uploads/encode/".$filename_without_ext.".mp4", $rootpath."uploads/vids/".$filename_without_ext."/".$filename_without_ext.".mp4") ;
+						if (file_exists($rootpath."uploads/encode/".$filename_without_ext.".mp4")) {
+							rename($rootpath."uploads/encode/".$filename_without_ext.".mp4", $rootpath."uploads/vids/".$filename_without_ext."/".$filename_without_ext.".mp4") ;
+						}
 					} else {
-						rename($rootpath."uploads/encode/origineel".$orirand.".".$ext, $rootpath."uploads/vids/".$filename_without_ext."/".$filename_without_ext.".mp4") ;
+						if (file_exists($rootpath."uploads/encode/origineel".$orirand.".".$ext)) {
+							rename($rootpath."uploads/encode/origineel".$orirand.".".$ext, $rootpath."uploads/vids/".$filename_without_ext."/".$filename_without_ext.".mp4") ;
+						}
 					}
 
 				}
@@ -155,12 +165,13 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 
 			}
 			//remove origineel
-			if (getSetting("removeorifile", $db) == '1') {
-				unlink($rootpath."uploads/encode/origineel".$orirand.".".$ext) ;
-			} else {
-				rename($rootpath."uploads/encode/origineel".$orirand.".".$ext, $rootpath."uploads/encode/".$originalname) ;
+			if (file_exists($rootpath."uploads/encode/origineel".$orirand.".".$ext)) {
+				if (getSetting("removeorifile", $db) == '1') {
+					unlink($rootpath."uploads/encode/origineel".$orirand.".".$ext) ;
+				} else {
+						rename($rootpath."uploads/encode/origineel".$orirand.".".$ext, $rootpath."uploads/encode/".$originalname) ;
+				}
 			}
-
 
 			if (getSetting("autoacceptvideo", $db) == '0') {
 				$status = "false" ;
@@ -179,7 +190,7 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 
 						$db->query("SELECT email, username FROM member WHERE USERNAME = '".$value['poster']."' LIMIT 1") ;
 						$member = $db->fetch() ;
-						sendmail(array(array("email"=>$member['email'], "name"=>$member['username'])), 'Video Approved', $msg) ;
+						sendmail(array(array("email"=>$member['email'], "name"=>$member['username'])), 'Video Approved', $msg, 'no') ;
 					}
 				//send mail to subscribed users
 					if (getSetting("mail_friend_subscribed", $db) == '1') {
@@ -190,16 +201,16 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 						$msg = str_replace(array('[TITLE]', '[SITENAME]', '[MEDIALINK]', '[SITEURL]', '[POSTER]'), array($value['title'], getSetting("sitename", $db), $sitepath."play/".url_encode($value['title']), $sitepath, $value['poster']), $msg);
 
 
-						$db->query("SELECT * FROM subscription WHERE userid = '".$memberid['id']."'");
+						$db->query("SELECT * FROM subscription WHERE subscribedtoid = '".$memberid['id']."'");
 						$subscripids = $db->fetchAll() ;
 						$subarray = array() ;
 
 						foreach($subscripids as $subvalue) {
-							$db->query("SELECT email, username FROM member WHERE id = '".$subvalue['subscribedtoid']."' LIMIT 1") ;
+							$db->query("SELECT email, username FROM member WHERE id = '".$subvalue['userid']."' LIMIT 1") ;
 							$subinfo = $db->fetch() ;
 							array_push($subarray, array("email"=>$subinfo['email'], "name"=>$subinfo['username']));
 						}
-						sendmail($subarray, $value['poster'].' Uploaded a new video', $msg) ;
+						sendmail($subarray, $value['poster'].' Uploaded a new video', $msg, 'no') ;
 					}
 				//send mail to friend of users
 					if (getSetting("mail_video_friends", $db) == '1') {
@@ -229,7 +240,7 @@ if (removespechar($_GET["cronpass"]) != getSetting("passcron", $db)) {
 									}
 							}
 						}
-						sendmail($friarray, $value['poster'].' Uploaded a new video', $msg) ;
+						sendmail($friarray, $value['poster'].' Uploaded a new video', $msg, 'no') ;
 					}
 
 
@@ -298,10 +309,8 @@ function makethumbs($basevid,$pathtothumb) {
 	$lw = getSetting("thumb_w1", $db) ;
 	$lh = getSetting("thumb_h1", $db) ;
 
-
-
 //how many thumbs we want
-	$thumbsnumber = '12';
+	$thumbsnumber = getSetting("thumbsnumber", $db);
 //we dont want an end thumb so we take of 2 precent
 	$vid_duration_sec = (getduration($basevid, 'sec') / 100) * 98;
 
@@ -319,7 +328,7 @@ function makethumbs($basevid,$pathtothumb) {
 
 
 		if (filesize($imagepath) == "0") {
-			//unlink($imagepath) ;
+			unlink($imagepath) ;
 		}
 		if (file_exists($imagepath)) {
 			chmod($imagepath, 0755);

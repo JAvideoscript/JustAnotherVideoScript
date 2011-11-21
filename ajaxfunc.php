@@ -26,7 +26,8 @@ function displayRUser($res) {
 			if ($value['added'] < time()) {
 				$count++ ;
 				$thumbpath = $path.'uploads/thumbs/' ;
-				$thumb = $sitepath."uploads/thumbs/".$value['fileid'].".jpg" ;
+				$thumb = $sitepath."uploads/thumbs/".$value['fileid']."/".$value['mainthumb'].".jpg" ;
+
 					if ($thumb == '') {
 						$thumb = $templateimagepath."default_video_thumb.png" ;
 					}

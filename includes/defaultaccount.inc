@@ -39,12 +39,6 @@ $green = "<img src='".$templateimagepath."green.png' border=0>" ;
 		$favstats = $green ;
 	}
 
-	if ($res['lookingfor'] == '') {
-		$lookstats = $red ;
-		$countpro = $countpro - 25 ;
-	} else {
-		$lookstats = $green ;
-	}
 	if ($countpro == "100") {
 		$accountsetup = '<green>'.$countpro.' %</green>' ;
 	} else {

@@ -80,7 +80,7 @@ if (isset($_POST['username'])) {
 				$headers = "From: \"".getSetting("default_from", $db)."\" <".getSetting("contact_email", $db).">>\r\n"."Reply-To: ".getSetting("contact_email", $db)."\r\n"."X-Mailer: PHP/".phpversion() ;
 			
 				echo "<div id='home'><h2>New Registration</h2></div> <h4>An e-mail has been sent to the address you supplied with instructions on how to complete the registration process.<br/>Thankyou for registering.</h4>" ;
-				$ans = sendmail(array(array("email"=>$email, "name"=>$username)), 'Activation required', $message, $headers) ;
+				$ans = sendmail(array(array("email"=>$email, "name"=>$username)), 'Activation required', $message, $headers, 'yes') ;
 				echo $ans."<br />" ;
 				$halt = true ;
 			

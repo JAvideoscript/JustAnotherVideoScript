@@ -29,6 +29,20 @@ $db->query("SELECT * FROM email_text WHERE ident = 'email_approved_admin'") ;
 $mail = $db->fetch() ;
 $emailapproveadmin = $mail['phrase'] ;
 
+$db->query("SELECT * FROM email_text WHERE ident = 'email_rejected'") ;
+$mail = $db->fetch() ;
+$emailrejected = $mail['phrase'] ;
+
+
+$db->query("SELECT * FROM email_text WHERE ident = 'email_request_friend'") ;
+$mail = $db->fetch() ;
+$mailfriendrequest = $mail['phrase'] ;
+
+$db->query("SELECT * FROM email_text WHERE ident = 'email_friend_pm'") ;
+$mail = $db->fetch() ;
+$mailfriendpm = $mail['phrase'] ;
+
+
 
 if (isset($_POST['submit'])) {
 	//email settings
@@ -66,7 +80,15 @@ if (isset($_POST['submit'])) {
 	$emailapprovedfriend = addslashes($_POST['emailapprovedfriend']) ;
 	$db->query("UPDATE `email_text` SET `phrase` = '".$emailapprovedfriend."' WHERE `ident` = 'email_approved_friend'") ;
 	
+	$emailrejected = addslashes($_POST['emailrejected']) ;
+	$db->query("UPDATE `email_text` SET `phrase` = '".$emailrejected."' WHERE `ident` = 'email_rejected'") ;	
 	
+	$mailfriendrequest = addslashes($_POST['mailfriendrequest']) ;
+	$db->query("UPDATE `email_text` SET `phrase` = '".$mailfriendrequest."' WHERE `ident` = 'email_request_friend'") ;		
+	
+	$mailfriendpm = addslashes($_POST['mailfriendpm']) ;
+	$db->query("UPDATE `email_text` SET `phrase` = '".$mailfriendpm."' WHERE `ident` = 'email_friend_pm'") ;
+
 }
 
 $mail_video_admin = getSetting(mail_video_admin, $db) == 1 ? 'CHECKED' : '' ;
@@ -137,7 +159,11 @@ $mail_friend_subscribed = getSetting(mail_friend_subscribed, $db) == 1 ? 'CHECKE
 		<li>
 				<label for="emailapproved">Video approved email:</label>
 				<textarea rows="5" name="emailapproved"><?=$emailapproved?></textarea>
-		</li>		
+		</li>
+		<li>
+				<label for="emailrejected">Video rejected email:</label>
+				<textarea rows="5" name="emailrejected"><?=$emailrejected?></textarea>
+		</li>	
 		<li>
 				<label for="emailapprovedsub">Video approved email to subscribers of uploader:</label>
 				<textarea rows="5" name="emailapprovedsub"><?=$emailapprovedsub?></textarea>
@@ -147,7 +173,15 @@ $mail_friend_subscribed = getSetting(mail_friend_subscribed, $db) == 1 ? 'CHECKE
 				<textarea rows="5" name="emailapprovedfriend"><?=$emailapprovedfriend?></textarea>
 		</li>	
 
+		<li>
+				<label for="mailfriendpm">When user gets a PM:</label>
+				<textarea rows="5" name="mailfriendpm"><?=$mailfriendpm?></textarea>
+		</li>	
 
+		<li>
+				<label for="mailfriendrequest">Send new friend request:</label>
+				<textarea rows="5" name="mailfriendrequest"><?=$mailfriendrequest?></textarea>
+		</li>		
 		
 		<li>
 				<label for="emailactivate">Activate email:</label>

@@ -60,6 +60,8 @@ include_once("adminfunctions.inc");
 	$encodesize = getSetting(encodesize, $db) ;
 	$framerate = getSetting(framerate, $db) ;
 	$passcron = getSetting(passcron, $db) ;
+	$sitefolder = getsetting("sitefolder", $db) ;
+	$sitepath = "http://".$_SERVER['SERVER_NAME'].$sitefolder ;
 	$croncommand = $curlpath. ' ' .$sitepath.'includes/encode.php?cronpass='.$passcron ;
 	$videoaspect = getSetting(videoaspect, $db) ;
 	$videobitrate = getSetting(videobitrate, $db) ;

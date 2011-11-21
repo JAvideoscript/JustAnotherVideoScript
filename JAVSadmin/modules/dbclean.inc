@@ -28,19 +28,31 @@ if ($_POST['massfunc'] !== "") {
 						if (file_exists($rootpath."uploads/vids/".$fileid."/".$fileid.".flv")) {
 							unlink($rootpath."uploads/vids/".$fileid."/".$fileid.".flv") ;
 						}
-						if (file_exists($rootpath."uploads/thumbs/".$fileid.".jpg")) {
-							unlink($rootpath."uploads/thumbs/".$fileid.".jpg") ;
-						}
 						if (file_exists($rootpath."uploads/vids/".$fileid)) {
 							rmdir($rootpath."uploads/vids/".$fileid."/") ;
 						}
+						
+						$thumbdir = $rootpath."uploads/thumbs/".$fileid."/" ;
+						if (file_exists($thumbdir)) {
+							foreach(glob($thumbdir.'*.*') as $v){
+								unlink($v);
+							}
+							rmdir($thumbdir);
+						}
+						
 						
 						$deleteid = $resCheck['id'] ;
 						$db->query("DELETE FROM `media` WHERE id = '".$deleteid."'") ;
 						echo "Deleted Video with id: $deleteid <br>" ;
 
 					} else {
-						unlink($rootpath."uploads/thumbs/".$fileid.".jpg") ;
+						$thumbdir = $rootpath."uploads/thumbs/".$fileid."/" ;
+						if (file_exists($thumbdir)) {
+							foreach(glob($thumbdir.'*.*') as $v){
+								unlink($v);
+							}
+							rmdir($thumbdir);
+						}
 						$deleteid = $resCheck['id'] ;
 						$db->query("DELETE FROM `media` WHERE id = '".$deleteid."'") ;
 						echo "Deleted Video with id: $deleteid <br>" ;
@@ -117,7 +129,6 @@ $row = $db->fetchAll() ;
 	
 	echo "<td align='left' width='50px'><b>Status</b></td>" ;
 	
-	echo "<td align='left' width='165px'><b>Thumb</b></td>" ;
 	echo "<td align='left' width='150px'><b>Media info</b></td>" ;
 	echo "<td align='left' width='40px'><b>Category</b></td>" ;
 	echo "<td align='left' width='100px'><b>Video info</b></td>" ;
@@ -137,7 +148,6 @@ $row = $db->fetchAll() ;
 		} else {
 			$mobilecheck = "no" ;
 		}
-		$thumb = "<img src='".$sitepath."uploads/thumbs/".$value['fileid'].".jpg' width='160px' height='120px'>" ;
 			
 		
 		echo "<tr><td align='left'><b><input name='check_all_user".$value['id']."' type='checkbox'></b></td>" ;
@@ -145,7 +155,6 @@ $row = $db->fetchAll() ;
 		
 		echo "<td align='left'>".$value['status']."</td>" ;
 		
-		echo "<td align='left'>".$thumb."</td>" ;
 		echo "<td align='left'>Fileid: ".$value['fileid']."<br>Title: ".$value['title']."<br>Desc: ".$value['description']."<br>Tags: ".$value['tags']."</td>" ;
 		echo "<td align='left'>".$value['category']."</td>" ;
 		echo "<td align='left'>MediaType: ".$value['mediatype']."<br>Poster: ".$value['poster']."<br>Duration: ".$value['duration']."<br>Added: ".$added."</td>" ;

@@ -17,7 +17,7 @@
 		$msg = str_replace("[PASSWORD]", $newpass, $msg) ;
 		$msg = str_replace("[SITENAME]", getSetting("sitename", $db), $msg) ;
 		$headers = "From: \"".getSetting('default_from', $db)."\" <".getSetting("contact_email", $db).">>\r\n"."Reply-To: ".getSetting("contact_email", $db)."\r\n"."X-Mailer: PHP/".phpversion() ;
-		sendmail(array(array("email"=>$res['email'], "name"=>$res['username'])), 'Password reset', $msg, $headers) ;
+		sendmail(array(array("email"=>$res['email'], "name"=>$res['username'])), 'Password reset', $msg, $headers, 'yes') ;
 		$haltMessage = "Email sent." ;
 	}
 	else {

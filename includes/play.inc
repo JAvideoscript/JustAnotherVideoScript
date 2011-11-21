@@ -219,7 +219,7 @@ if ($vrw != "") {
 				so.addParam("allowscriptacces","always");
 				so.addParam("allowfullscreen","true");
 				so.addParam("wmode","opaque");			
-				so.addParam("flashvars","file='.$sitepath.'uploads/vids/'.$videores['fileid'].'/'.$videores['fileid'].'.flv'.$hd.'&amp;skin='.$sitepath.'player/jwplayer/skin/'.$skinname.'&amp;autostart=true&amp;dock=false&amp;provider=http&amp;stretching=false&amp;plugins=viral-3");
+				so.addParam("flashvars","file='.$sitepath.'uploads/vids/'.$videores['fileid'].'/'.$videores['fileid'].'.flv'.$hd.'&amp;skin='.$sitepath.'player/jwplayer/skin/'.$skinname.'&amp;autostart=true&amp;dock=false&amp;provider=http&amp;stretching=false");
 				so.write("player");
 				</script>'; 
 
